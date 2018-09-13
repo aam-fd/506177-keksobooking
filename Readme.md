@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
-* Студент: [Анастасия Андреева](https://up.htmlacademy.ru/javascript/15/user/506177).
-* Наставник: [Валерий Семененко](https://up.htmlacademy.ru/javascript/15/user/851479).
+* Студент: [Анастасия Андреева](https://htmlacademy.ru/profile/amaandreeva).
+* Наставник: [Дмитрий Русаков](https://htmlacademy.ru/profile/id6302).
 
 ---
 
