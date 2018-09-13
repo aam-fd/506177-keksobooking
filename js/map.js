@@ -1,8 +1,5 @@
 'use strict';
 
-// 1. Создайте массив, состоящий из 8 сгенерированных JS объектов,
-// которые будут описывать похожие объявления неподалёку.
-
 var ADS_NUMBER = 8;
 // размеры поля объявлений
 var MIN_X = 0;
@@ -114,13 +111,9 @@ var getAdsDescriptions = function () {
 
 var adsDescriptions = getAdsDescriptions();
 
-// 2. У блока .map уберите класс .map--faded.
 var mapAds = document.querySelector('.map');
 mapAds.classList.remove('map--faded');
 
-// 3. На основе данных, созданных в первом пункте, создайте DOM-элементы,
-// соответствующие меткам на карте, и заполните их данными из массива.
-// Итоговую разметку метки .map__pin можно взять из шаблона #pin.
 var mapPinTemplate = document.querySelector('#pin')
     .content
     .querySelector('.map__pin');
@@ -144,8 +137,6 @@ var getRenderMapPin = function (adsDescription) {
   return mapPin;
 };
 
-// 4. Отрисуйте сгенерированные DOM-элементы в блок .map__pins.
-// Для вставки элементов используйте DocumentFragment.
 var fillFragmentPin = function () {
   var fragmentPin = document.createDocumentFragment();
   for (var i = 0; i < adsDescriptions.length; i++) {
@@ -157,8 +148,6 @@ var fillFragmentPin = function () {
 var mapPinsList = mapAds.querySelector('.map__pins');
 mapPinsList.appendChild(fillFragmentPin());
 
-// 5.1 На основе первого по порядку элемента из сгенерированного массива
-// и шаблона #card создайте DOM-элемент объявления, заполните его данными из объекта
 var cardTemplate = document.querySelector('#card')
     .content;
 
@@ -186,9 +175,8 @@ var getRenderCardAds = function (adsDescription) {
   return cardAds;
 };
 
-// 5.2 вставьте полученный DOM-элемент в блок .map перед блоком.map__filters-container
 var fragmentAds = document.createDocumentFragment();
-fragmentAds.appendChild(getRenderCardAds(adsDescriptions[0])); // На основе первого по порядку элемента
+fragmentAds.appendChild(getRenderCardAds(adsDescriptions[0]));
 
 var filterContainer = document.querySelector('.map__filters-container');
 mapAds.insertBefore(fragmentAds, filterContainer);
