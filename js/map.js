@@ -64,7 +64,7 @@ var Guest = {
 
 var Room = {
   MIN: 1,
-  MAX: 5 
+  MAX: 5
 };
 
 var Price = {
@@ -86,7 +86,6 @@ var Feature = {
 var ads = [];
 
 var adsMap = document.querySelector('.map');
-var mapActiveState;
 var adPinTemplate = document.querySelector('#pin')
     .content
     .querySelector('.map__pin');
@@ -97,7 +96,7 @@ var filterContainer = document.querySelector('.map__filters-container');
 var adsFragment = document.createDocumentFragment();
 
 var getRandomArrElement = function (arr) {
-  var randonArrIndex =  Math.round(Math.random() * (arr.length - 1));
+  var randonArrIndex = Math.round(Math.random() * (arr.length - 1));
   return arr[randonArrIndex];
 };
 
@@ -114,12 +113,13 @@ var getCorrectY = function (adsDescription) {
 };
 
 var shuffleArr = function (arr) {
-  var j, x, i;
-  for (i = 0; i < arr.length; i++) {
-      j = Math.floor(Math.random() * (i + 1));
-      x = arr[i];
-      arr[i] = arr[j];
-      arr[j] = x;
+  var j;
+  var x;
+  for (var i = 0; i < arr.length; i++) {
+    j = Math.floor(Math.random() * (i + 1));
+    x = arr[i];
+    arr[i] = arr[j];
+    arr[j] = x;
   }
   return arr;
 };
@@ -158,8 +158,7 @@ var createAdsDescriptions = function () {
 };
 
 var adsDescriptions = createAdsDescriptions();
-
-mapActiveState = adsMap.classList.remove('map--faded');
+adsMap.classList.remove('map--faded');
 
 var createMapPin = function (adsDescription) {
   var adPin = adPinTemplate.cloneNode(true);
