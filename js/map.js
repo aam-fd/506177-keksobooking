@@ -83,20 +83,24 @@ var Feature = {
   MAX: 6
 };
 
-var map = document.querySelector('.map');
-
-var mapInactiveState = 'map--faded';
-
-var pinsList = map.querySelector('.map__pins');
+var cardTemplate = document.querySelector('#card')
+    .content;
 
 var pinTemplate = document.querySelector('#pin')
     .content
     .querySelector('.map__pin');
 
-var filterContainer = document.querySelector('.map__filters-container');
+var map = document.querySelector('.map');
+var mapFadedClassName = 'map--faded';
+var pinsList = map.querySelector('.map__pins');
+var pinMain = map.querySelector('.map__pin--main');
+var mapFilterContainer = map.querySelector('.map__filters-container');
 
-var cardTemplate = document.querySelector('#card')
-    .content;
+var fieldsetArray = document.querySelectorAll('fieldset');
+
+var adForm = document.querySelector('.ad-form');
+var adFormAddress = adForm.querySelector('#address');
+var adFormDisabledClassName = 'ad-form--disabled';
 
 var getRandomArrayElement = function (array) {
   var randonArrayIndex = getRandomNumber(0, array.length - 1);
@@ -148,6 +152,30 @@ var renderMapPins = function (array) {
   }
 
   return pinFragment;
+};
+
+var renderAdCard = function (object) {
+  var adCard = createAdCardLayout(object);
+  var adFragment = document.createDocumentFragment();
+  adFragment.appendChild(adCard);
+
+  return adFragment;
+};
+
+var switchOnDisabled = function (elementArray) {
+  for (var i = 0; i < elementArray.length; i++) {
+    if (!elementArray[i].hasAttribute('disabled')) {
+      elementArray[i].setAttribute('disabled', true);
+    }
+  }
+};
+
+var switchOffDisabled = function (elementArray) {
+  for (var i = 0; i < elementArray.length; i++) {
+    if (elementArray[i].hasAttribute('disabled')) {
+      elementArray[i].removeAttribute('disabled');
+    }
+  }
 };
 
 var createAdCardLayout = function (object) {
@@ -209,14 +237,32 @@ var createAdsDescriptions = function () {
   }
   return ads;
 };
-
 var adsDescriptions = createAdsDescriptions();
+
 pinsList.appendChild(renderMapPins(adsDescriptions));
 
-map.classList.remove(mapInactiveState);
+var selectedAd = adsDescriptions[0];
 
-var adsCard = createAdCardLayout(adsDescriptions[0]);
+map.insertBefore(renderAdCard(selectedAd), mapFilterContainer);
 
-var adsFragment = document.createDocumentFragment();
-adsFragment.appendChild(adsCard);
-map.insertBefore(adsFragment, filterContainer);
+switchOnDisabled(fieldsetArray);
+
+pinMain.addEventListener('mouseup', function () {
+  activateBookingMainPage();
+});
+
+var activateBookingMainPage = function () {
+
+  map.classList.remove(mapFadedClassName);
+  adForm.classList.remove(adFormDisabledClassName);
+  switchOffDisabled(fieldsetArray);
+
+};
+
+var fillAddressField = function (address) {
+  adFormAddress.setAttribute('placeholder', address);
+};
+
+// console.log(pinMain);
+
+fillAddressField();
