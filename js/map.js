@@ -99,7 +99,7 @@ var cardTemplate = document.querySelector('#card')
     .content;
 
 var getRandomArrayElement = function (array) {
-  var randonArrayIndex = Math.round(Math.random() * (array.length - 1));
+  var randonArrayIndex = getRandomNumber(0, array.length - 1);
 
   return array[randonArrayIndex];
 };
