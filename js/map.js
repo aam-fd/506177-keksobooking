@@ -150,7 +150,7 @@ var createMapPinLayout = function (object) {
   adPin.style = 'left:' + getCorrectCoordinate(object.location.x, Pin.GAP_WIDTH) + 'px; top:' + getCorrectCoordinate(object.location.y, Pin.HEIGHT) + 'px;';
   adPin.querySelector('img').src = object.author.avatar;
   adPin.querySelector('img').alt = object.offer.title;
-
+  adPin.querySelector('img').id = object.id;
   return adPin;
 };
 
@@ -240,21 +240,19 @@ var createAdsDescriptions = function () {
       location: {
         x: hostX,
         y: hostY,
-      }
+      },
+
+      id: [i],
     });
   }
   return ads;
 };
 var adsDescriptions = createAdsDescriptions();
-pinsList.appendChild(renderMapPins(adsDescriptions));
-
-var selectedAd = adsDescriptions[0];
-map.insertBefore(renderAdCard(selectedAd), mapFilterContainer);
 
 switchOnDisabled(fieldsetArray);
 fillAddressField(mainPinX, mainPinY, MainPin.GAP_HEAD_PIN);
 
-var activateBookingMainPage = function () {
+var mainPageActivationHandler = function () {
 
   map.classList.remove(mapFadedClassName);
   adForm.classList.remove(adFormDisabledClassName);
@@ -262,11 +260,30 @@ var activateBookingMainPage = function () {
 
 };
 
-var setMainPinCorrectly = function () {
+var mainPinCorrectlyHandler = function () {
   mainPin.style = 'left: ' + mainPinX + 'px; top: ' + getCorrectCoordinate(mainPinY, MainPin.GAP_TAIL_PIN) + 'px;';
 };
 
+var mapPinsHandler = function () {
+  pinsList.appendChild(renderMapPins(adsDescriptions));
+};
+
 mainPin.addEventListener('mouseup', function () {
-  activateBookingMainPage();
-  setMainPinCorrectly();
+  mainPageActivationHandler();
+  mainPinCorrectlyHandler();
+  mapPinsHandler();
+
+});
+
+var clickHandler = function (evt) {
+  var clickedElement = evt.target.id;
+  var selectedAd = adsDescriptions[clickedElement];
+  map.insertBefore(renderAdCard(selectedAd), mapFilterContainer);
+};
+
+document.addEventListener('click', function () {
+  var elements = document.querySelectorAll('.map__pin');
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].addEventListener('click', clickHandler);
+  }
 });
