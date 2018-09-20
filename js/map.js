@@ -260,7 +260,7 @@ var mainPageActivationHandler = function () {
 
 };
 
-var mainPinCorrectlyHandler = function () {
+var mainPinCorrectHandler = function () {
   mainPin.style = 'left: ' + mainPinX + 'px; top: ' + getCorrectCoordinate(mainPinY, MainPin.GAP_TAIL_PIN) + 'px;';
 };
 
@@ -268,22 +268,22 @@ var mapPinsHandler = function () {
   pinsList.appendChild(renderMapPins(adsDescriptions));
 };
 
-mainPin.addEventListener('mouseup', function () {
-  mainPageActivationHandler();
-  mainPinCorrectlyHandler();
-  mapPinsHandler();
-
-});
-
 var clickHandler = function (evt) {
   var clickedElement = evt.target.id;
   var selectedAd = adsDescriptions[clickedElement];
   map.insertBefore(renderAdCard(selectedAd), mapFilterContainer);
 };
 
-document.addEventListener('click', function () {
+var pinElementsHandler = function () {
   var elements = document.querySelectorAll('.map__pin');
   for (var i = 0; i < elements.length; i++) {
     elements[i].addEventListener('click', clickHandler);
   }
+};
+
+mainPin.addEventListener('mouseup', function () {
+  mainPageActivationHandler();
+  mainPinCorrectHandler();
+  mapPinsHandler();
+  pinElementsHandler();
 });
