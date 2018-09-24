@@ -73,9 +73,14 @@ var Price = {
 };
 
 var Pin = {
-  WIDTH: 65,
+  WIDTH: 50,
+  GAP_WIDTH: 25,
+  GAP_HEIGHT: 70
+};
+
+var MainPin = {
   GAP_WIDTH: 33,
-  HEIGHT: 87
+  GAP_HEIGHT: 55
 };
 
 var Feature = {
@@ -83,37 +88,13 @@ var Feature = {
   MAX: 6
 };
 
-var map = document.querySelector('.map');
-
-var mapInactiveState = 'map--faded';
-
-var pinsList = map.querySelector('.map__pins');
-
-var pinTemplate = document.querySelector('#pin')
-    .content
-    .querySelector('.map__pin');
-
-var filterContainer = document.querySelector('.map__filters-container');
-
-var cardTemplate = document.querySelector('#card')
-    .content;
-
 var getRandomArrayElement = function (array) {
-  var randonArrayIndex = Math.round(Math.random() * (array.length - 1));
-
+  var randonArrayIndex = getRandomNumber(0, array.length - 1);
   return array[randonArrayIndex];
 };
 
 var getRandomNumber = function (min, max) {
   return Math.round(min + Math.random() * (max - min));
-};
-
-var getCorrectX = function (object) {
-  return object.location.x - Pin.GAP_WIDTH;
-};
-
-var getCorrectY = function (object) {
-  return object.location.y - Pin.HEIGHT;
 };
 
 var shuffleArray = function (array) {
@@ -129,51 +110,6 @@ var shuffleArray = function (array) {
   }
 
   return mixedArray;
-};
-
-var createMapPinLayout = function (object) {
-  var adPin = pinTemplate.cloneNode(true);
-  adPin.style = 'left:' + getCorrectX(object) + 'px; top:' + getCorrectY(object) + 'px;';
-  adPin.querySelector('img').src = object.author.avatar;
-  adPin.querySelector('img').alt = object.offer.title;
-
-  return adPin;
-};
-
-var renderMapPins = function (array) {
-  var pinFragment = document.createDocumentFragment();
-
-  for (var i = 0; i < array.length; i++) {
-    pinFragment.appendChild(createMapPinLayout(array[i]));
-  }
-
-  return pinFragment;
-};
-
-var createAdCardLayout = function (object) {
-  var adCardLayout = cardTemplate.cloneNode(true);
-  adCardLayout.querySelector('.popup__avatar').src = object.author.avatar;
-  adCardLayout.querySelector('.popup__title').textContent = object.offer.title;
-  adCardLayout.querySelector('.popup__text--address').textContent = object.offer.address;
-  adCardLayout.querySelector('.popup__text--price').textContent = object.offer.price + '₽/ночь';
-  adCardLayout.querySelector('.popup__type').textContent = TYPES_DESCRIPTION[object.offer.type];
-  adCardLayout.querySelector('.popup__text--capacity').textContent = object.offer.rooms + ' комнаты для ' + object.offer.guests + ' гостей';
-  adCardLayout.querySelector('.popup__text--time').textContent = 'Заезд после ' + object.offer.checkin + ', выезд до' + object.offer.checkout;
-  adCardLayout.querySelector('.popup__description').textContent = object.offer.description;
-
-  var adCardFeatures = adCardLayout.querySelector('.popup__features');
-  adCardFeatures.textContent = '';
-  for (var i = 0; i < object.offer.features.length; i++) {
-    adCardFeatures.insertAdjacentHTML('beforeend', '<li class="popup__feature popup__feature--' + object.offer.features[i] + '"></li>');
-  }
-
-  var adCardPhotos = adCardLayout.querySelector('.popup__photos');
-  adCardPhotos.textContent = '';
-  for (var j = 0; j < object.offer.photos.length; j++) {
-    adCardPhotos.insertAdjacentHTML('beforeend', '<img src="' + object.offer.photos[j] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья"></img>');
-  }
-
-  return adCardLayout;
 };
 
 var createAdsDescriptions = function () {
@@ -204,19 +140,154 @@ var createAdsDescriptions = function () {
       location: {
         x: hostX,
         y: hostY,
-      }
+      },
+
+      id: [i],
     });
   }
   return ads;
 };
 
 var adsDescriptions = createAdsDescriptions();
-pinsList.appendChild(renderMapPins(adsDescriptions));
 
-map.classList.remove(mapInactiveState);
+var pinTemplate = document.querySelector('#pin')
+    .content
+    .querySelector('.map__pin');
 
-var adsCard = createAdCardLayout(adsDescriptions[0]);
+var createMapPinLayout = function (object) {
+  var adPin = pinTemplate.cloneNode(true);
 
-var adsFragment = document.createDocumentFragment();
-adsFragment.appendChild(adsCard);
-map.insertBefore(adsFragment, filterContainer);
+  var coordinateX = object.location.x - Pin.GAP_WIDTH;
+  adPin.style.left = coordinateX + 'px';
+  var coordinateY = object.location.y - Pin.GAP_HEIGHT;
+  adPin.style.top = coordinateY + 'px';
+
+  adPin.querySelector('img').src = object.author.avatar;
+  adPin.querySelector('img').alt = object.offer.title;
+  adPin.querySelector('img').id = object.id;
+  return adPin;
+};
+
+var cardTemplate = document.querySelector('#card')
+    .content;
+
+var createAdCardLayout = function (object) {
+  var adCardLayout = cardTemplate.cloneNode(true);
+  adCardLayout.querySelector('.popup__avatar').src = object.author.avatar;
+  adCardLayout.querySelector('.popup__title').textContent = object.offer.title;
+  adCardLayout.querySelector('.popup__text--address').textContent = object.offer.address;
+  adCardLayout.querySelector('.popup__text--price').textContent = object.offer.price + '₽/ночь';
+  adCardLayout.querySelector('.popup__type').textContent = TYPES_DESCRIPTION[object.offer.type];
+  adCardLayout.querySelector('.popup__text--capacity').textContent = object.offer.rooms + ' комнаты для ' + object.offer.guests + ' гостей';
+  adCardLayout.querySelector('.popup__text--time').textContent = 'Заезд после ' + object.offer.checkin + ', выезд до' + object.offer.checkout;
+  adCardLayout.querySelector('.popup__description').textContent = object.offer.description;
+
+  var adCardFeatures = adCardLayout.querySelector('.popup__features');
+  adCardFeatures.textContent = '';
+  for (var i = 0; i < object.offer.features.length; i++) {
+    adCardFeatures.insertAdjacentHTML('beforeend', '<li class="popup__feature popup__feature--' + object.offer.features[i] + '"></li>');
+  }
+
+  var adCardPhotos = adCardLayout.querySelector('.popup__photos');
+  adCardPhotos.textContent = '';
+  for (var j = 0; j < object.offer.photos.length; j++) {
+    adCardPhotos.insertAdjacentHTML('beforeend', '<img src="' + object.offer.photos[j] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья"></img>');
+  }
+
+  return adCardLayout;
+};
+
+var createMapPins = function (array) {
+  var pinFragment = document.createDocumentFragment();
+  for (var i = 0; i < array.length; i++) {
+    pinFragment.appendChild(createMapPinLayout(array[i]));
+  }
+  return pinFragment;
+};
+
+var createAdCard = function (object) {
+  var adCard = createAdCardLayout(object);
+  var adFragment = document.createDocumentFragment();
+  adFragment.appendChild(adCard);
+
+  return adFragment;
+};
+
+var map = document.querySelector('.map');
+var adForm = document.querySelector('.ad-form');
+var adFormAddress = adForm.querySelector('#address');
+var formElements = document.querySelectorAll('fieldset');
+
+var switchDisabled = function (elementArray, state) {
+  for (var i = 0; i < elementArray.length; i++) {
+    elementArray[i].disabled = state;
+  }
+};
+
+var setDisabled = function () {
+  switchDisabled(formElements, true);
+};
+
+setDisabled();
+
+var setActive = function () {
+  switchDisabled(formElements, false);
+  map.classList.remove(MAP_FADED_CLASS_NAME);
+  adForm.classList.remove(FORM_DISABLED_CLASS_NAME);
+};
+
+var mainPin = map.querySelector('.map__pin--main');
+var mainPinX = mainPin.offsetLeft;
+var mainPinY = mainPin.offsetTop;
+
+var fillAddressField = function (x, y, gap) {
+  var pinAddressX = x + gap;
+  var pinAddressY = y + gap;
+  adFormAddress.setAttribute('placeholder', pinAddressX + ', ' + pinAddressY);
+};
+
+fillAddressField(mainPinX, mainPinY, MainPin.GAP_WIDTH);
+
+var MAP_FADED_CLASS_NAME = 'map--faded';
+var FORM_DISABLED_CLASS_NAME = 'ad-form--disabled';
+
+var getMainPinCoordinates = function () {
+  mainPin.style.left = mainPinX + 'px';
+
+  var correctY = mainPinY - MainPin.GAP_HEIGHT;
+  mainPin.style.top = correctY + 'px';
+};
+
+var pinsList = map.querySelector('.map__pins');
+
+var renderMapPins = function () {
+  pinsList.appendChild(createMapPins(adsDescriptions));
+};
+
+var mapFilterContainer = map.querySelector('.map__filters-container');
+
+var renderAdCard = function (selectedAd) {
+  map.insertBefore(createAdCard(selectedAd), mapFilterContainer);
+};
+
+var clickPinHandler = function (evt) {
+  var clickedElement = evt.target.id;
+  var selectedAd = adsDescriptions[clickedElement];
+  renderAdCard(selectedAd);
+};
+
+var renderSelectedAd = function () {
+  var pinElements = document.querySelectorAll('.map__pin');
+  for (var i = 0; i < pinElements.length; i++) {
+    pinElements[i].addEventListener('click', clickPinHandler);
+  }
+};
+
+var mouseUpHandler = function () {
+  setActive();
+  getMainPinCoordinates();
+  renderMapPins();
+  renderSelectedAd();
+};
+
+mainPin.addEventListener('mouseup', mouseUpHandler);
