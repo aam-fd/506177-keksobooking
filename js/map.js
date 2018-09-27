@@ -312,16 +312,6 @@ var formInvalidHandler = function (evt) {
 
 adForm.addEventListener('invalid', formInvalidHandler, true);
 
-var deselectFieldForm = function (object) {
-  object.target.classList.remove('ad-form__error');
-};
-
-var formChangeHandler = function (evt) {
-  deselectFieldForm(evt);
-};
-
-adForm.addEventListener('change', formChangeHandler);
-
 var typeInput = adForm.querySelector('#type');
 var priceInput = adForm.querySelector('#price');
 
