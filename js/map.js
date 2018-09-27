@@ -95,11 +95,6 @@ var TYPES_PRICE = {
   bungalo: 0
 };
 
-var TitleLength = {
-  MIN: 30,
-  MAX: 100
-};
-
 var getRandomArrayElement = function (array) {
   var randomArrayIndex = getRandomNumber(0, array.length - 1);
   return array[randomArrayIndex];
@@ -177,6 +172,7 @@ var createMapPinLayout = function (object) {
   adPin.querySelector('img').src = object.author.avatar;
   adPin.querySelector('img').alt = object.offer.title;
   adPin.querySelector('img').id = object.id;
+  adPin.id = object.id;
   return adPin;
 };
 
@@ -282,7 +278,7 @@ var renderAdCard = function (selectedAd) {
   map.insertBefore(createAdCard(selectedAd), mapFilterContainer);
 };
 
-var clickPinHandler = function (evt) {
+var pinClickHandler = function (evt) {
   var clickedElement = evt.target.id;
   var selectedAd = adsDescriptions[clickedElement];
   renderAdCard(selectedAd);
@@ -290,123 +286,84 @@ var clickPinHandler = function (evt) {
 
 var renderSelectedAd = function () {
   var pinElements = document.querySelectorAll('.map__pin');
-  for (var i = 0; i < pinElements.length; i++) {
-    pinElements[i].addEventListener('click', clickPinHandler);
+  for (var i = 1; i < pinElements.length; i++) {
+    pinElements[i].addEventListener('click', pinClickHandler);
   }
 };
 
-var mouseUpHandler = function () {
+var mainPinMouseUpHandler = function () {
   setActive();
   getMainPinCoordinates();
   renderMapPins();
   renderSelectedAd();
 };
 
-mainPin.addEventListener('mouseup', mouseUpHandler);
+mainPin.addEventListener('mouseup', mainPinMouseUpHandler);
 
 // adForm.action = 'https://js.dump.academy/keksobooking';
 
-var titleInput = adForm.querySelector('#title');
-titleInput.minLength = TitleLength.MIN;
-titleInput.maxLength = TitleLength.MAX;
-titleInput.required = true;
-
-var checkTitleValidity = function () {
-  if (titleInput.validity.tooShort) {
-    titleInput.setCustomValidity('Имя должно состоять минимум из ' + titleInput.minLength + ' символов');
-  } else if (titleInput.validity.tooLong) {
-    titleInput.setCustomValidity('Имя не должно превышать ' + titleInput.maxLength + ' символов');
-  } else if (titleInput.validity.valueMissing) {
-    titleInput.setCustomValidity('Это обязательное поле объявления!');
-  } else {
-    titleInput.setCustomValidity('');
-  }
+var selectInvalidFieldForm = function (object) {
+  object.target.classList.add('ad-form__error');
 };
 
-var titleValidityHandler = function () {
-  checkTitleValidity();
+var formInvalidHandler = function (evt) {
+  selectInvalidFieldForm(evt);
 };
 
-titleInput.addEventListener('invalid', titleValidityHandler);
+adForm.addEventListener('invalid', formInvalidHandler, true);
+
+var deselectFieldForm = function (object) {
+  object.target.classList.remove('ad-form__error');
+};
+
+var formChangeHandler = function (evt) {
+  deselectFieldForm(evt);
+};
+
+adForm.addEventListener('change', formChangeHandler);
 
 var typeInput = adForm.querySelector('#type');
 var priceInput = adForm.querySelector('#price');
 
-var changePriceInput = function (minPrice) {
-  priceInput.min = minPrice;
-  priceInput.placeholder = minPrice;
+var getPriceInput = function () {
+  var choosenType = typeInput.value;
+  priceInput.min = TYPES_PRICE[choosenType];
+  priceInput.placeholder = TYPES_PRICE[choosenType];
 };
 
-var typeHandler = function (evt) {
-  var choosenType = evt.target.value;
-  var minPrice = TYPES_PRICE[choosenType];
-  changePriceInput(minPrice);
+getPriceInput();
+
+var typeInputChangeHandler = function () {
+  getPriceInput();
 };
 
-priceInput.max = Price.MAX;
-priceInput.required = true;
-
-var checkPriceValidity = function () {
-  if (priceInput.validity.rangeUnderflow) {
-    priceInput.setCustomValidity('Цена должна быть больше ' + priceInput.min + ' рублей.');
-  } else if (priceInput.validity.rangeOverflow) {
-    priceInput.setCustomValidity('Цена должна быть меньше ' + priceInput.max + ' рублей.');
-  } else if (priceInput.validity.valueMissing) {
-    priceInput.setCustomValidity('Это обязательное поле объявления!');
-  } else {
-    priceInput.setCustomValidity('');
-  }
-};
-
-var priceValidityHandler = function () {
-  checkPriceValidity();
-};
-
-typeInput.addEventListener('input', typeHandler);
-priceInput.addEventListener('invalid', priceValidityHandler);
-
-addressInput.disabled = true;
+typeInput.addEventListener('change', typeInputChangeHandler);
 
 var timeInInput = adForm.querySelector('#timein');
 var timeOutInput = adForm.querySelector('#timeout');
 
-var chooseTimeIn = function () {
-  var timeIn = timeInInput.value;
-  var timeOut;
-  for (var i = 0; i < timeOutInput.length; i++) {
-    if (timeOutInput[i].value === timeIn) {
-      timeOut = timeOutInput[i].value;
-    }
-  }
-  timeOutInput.value = timeOut;
+var getTimeInInput = function (object) {
+  timeOutInput.value = object.target.value;
+};
+var getTimeOutInput = function (object) {
+  timeInInput.value = object.target.value;
 };
 
-var chooseTimeOut = function () {
-  var timeOut = timeOutInput.value;
-  var timeIn;
-  for (var i = 0; i < timeInInput.length; i++) {
-    if (timeInInput[i].value === timeOut) {
-      timeIn = timeInInput[i].value;
-    }
-  }
-  timeInInput.value = timeIn;
+var timeInInputChangeHandler = function (evt) {
+  getTimeInInput(evt);
 };
 
-var timeInHandler = function () {
-  chooseTimeIn();
+var timeOutInputChangeHandler = function (evt) {
+  getTimeOutInput(evt);
 };
 
-var timeOutHandler = function () {
-  chooseTimeOut();
-};
-
-timeInInput.addEventListener('input', timeInHandler);
-timeOutInput.addEventListener('input', timeOutHandler);
+timeInInput.addEventListener('change', timeInInputChangeHandler);
+timeOutInput.addEventListener('change', timeOutInputChangeHandler);
 
 var roomNumberInput = adForm.querySelector('#room_number');
 var capacityInput = adForm.querySelector('#capacity');
 
-var chooseRoomCapacity = function () {
+var getRoomCapacity = function () {
   var numberRooms = roomNumberInput.value;
 
   // булевые значения для кол-ва гостей
@@ -427,8 +384,10 @@ var chooseRoomCapacity = function () {
   }
 };
 
-var roomNumberHandler = function () {
-  chooseRoomCapacity();
+getRoomCapacity();
+
+var roomNumberChangeHandler = function () {
+  getRoomCapacity();
 };
 
-roomNumberInput.addEventListener('input', roomNumberHandler);
+roomNumberInput.addEventListener('change', roomNumberChangeHandler);

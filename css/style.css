@@ -874,6 +874,9 @@ fieldset {
           box-shadow: 0 0 2px 2px #ff6547;
 }
 
+.ad-form__element .ad-form__error {
+  border: 3px solid red;
+}
 
 /* Футер
    ========================================================================== */
