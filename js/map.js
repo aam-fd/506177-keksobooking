@@ -302,12 +302,12 @@ mainPin.addEventListener('mouseup', mainPinMouseUpHandler);
 
 // adForm.action = 'https://js.dump.academy/keksobooking';
 
-var selectInvalidFieldForm = function (object) {
-  object.target.classList.add('ad-form__error');
+var selectInvalidFieldForm = function (field) {
+  field.classList.add('ad-form__error');
 };
 
 var formInvalidHandler = function (evt) {
-  selectInvalidFieldForm(evt);
+  selectInvalidFieldForm(evt.target);
 };
 
 adForm.addEventListener('invalid', formInvalidHandler, true);
@@ -332,19 +332,16 @@ typeInput.addEventListener('change', typeInputChangeHandler);
 var timeInInput = adForm.querySelector('#timein');
 var timeOutInput = adForm.querySelector('#timeout');
 
-var getTimeInInput = function (object) {
-  timeOutInput.value = object.target.value;
-};
-var getTimeOutInput = function (object) {
-  timeInInput.value = object.target.value;
+var getTimeInput = function (input, value) {
+  input.value = value;
 };
 
 var timeInInputChangeHandler = function (evt) {
-  getTimeInInput(evt);
+  getTimeInput(timeOutInput, evt.target.value);
 };
 
 var timeOutInputChangeHandler = function (evt) {
-  getTimeOutInput(evt);
+  getTimeInput(timeInInput, evt.target.value);
 };
 
 timeInInput.addEventListener('change', timeInInputChangeHandler);
