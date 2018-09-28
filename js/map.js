@@ -88,9 +88,16 @@ var Feature = {
   MAX: 6
 };
 
+var TYPES_PRICE = {
+  palace: 10000,
+  flat: 1000,
+  house: 5000,
+  bungalo: 0
+};
+
 var getRandomArrayElement = function (array) {
-  var randonArrayIndex = getRandomNumber(0, array.length - 1);
-  return array[randonArrayIndex];
+  var randomArrayIndex = getRandomNumber(0, array.length - 1);
+  return array[randomArrayIndex];
 };
 
 var getRandomNumber = function (min, max) {
@@ -142,7 +149,7 @@ var createAdsDescriptions = function () {
         y: hostY,
       },
 
-      id: [i],
+      id: i,
     });
   }
   return ads;
@@ -165,6 +172,7 @@ var createMapPinLayout = function (object) {
   adPin.querySelector('img').src = object.author.avatar;
   adPin.querySelector('img').alt = object.offer.title;
   adPin.querySelector('img').id = object.id;
+  adPin.id = object.id;
   return adPin;
 };
 
@@ -215,7 +223,7 @@ var createAdCard = function (object) {
 
 var map = document.querySelector('.map');
 var adForm = document.querySelector('.ad-form');
-var adFormAddress = adForm.querySelector('#address');
+var addressInput = adForm.querySelector('#address');
 var formElements = document.querySelectorAll('fieldset');
 
 var switchDisabled = function (elementArray, state) {
@@ -243,7 +251,7 @@ var mainPinY = mainPin.offsetTop;
 var fillAddressField = function (x, y, gap) {
   var pinAddressX = x + gap;
   var pinAddressY = y + gap;
-  adFormAddress.setAttribute('placeholder', pinAddressX + ', ' + pinAddressY);
+  addressInput.value = pinAddressX + ', ' + pinAddressY;
 };
 
 fillAddressField(mainPinX, mainPinY, MainPin.GAP_WIDTH);
@@ -270,7 +278,7 @@ var renderAdCard = function (selectedAd) {
   map.insertBefore(createAdCard(selectedAd), mapFilterContainer);
 };
 
-var clickPinHandler = function (evt) {
+var pinClickHandler = function (evt) {
   var clickedElement = evt.target.id;
   var selectedAd = adsDescriptions[clickedElement];
   renderAdCard(selectedAd);
@@ -278,16 +286,95 @@ var clickPinHandler = function (evt) {
 
 var renderSelectedAd = function () {
   var pinElements = document.querySelectorAll('.map__pin');
-  for (var i = 0; i < pinElements.length; i++) {
-    pinElements[i].addEventListener('click', clickPinHandler);
+  for (var i = 1; i < pinElements.length; i++) {
+    pinElements[i].addEventListener('click', pinClickHandler);
   }
 };
 
-var mouseUpHandler = function () {
+var mainPinMouseUpHandler = function () {
   setActive();
   getMainPinCoordinates();
   renderMapPins();
   renderSelectedAd();
 };
 
-mainPin.addEventListener('mouseup', mouseUpHandler);
+mainPin.addEventListener('mouseup', mainPinMouseUpHandler);
+
+// adForm.action = 'https://js.dump.academy/keksobooking';
+
+var selectInvalidFieldForm = function (field) {
+  field.classList.add('ad-form__error');
+};
+
+var formInvalidHandler = function (evt) {
+  selectInvalidFieldForm(evt.target);
+};
+
+adForm.addEventListener('invalid', formInvalidHandler, true);
+
+var typeInput = adForm.querySelector('#type');
+var priceInput = adForm.querySelector('#price');
+
+var getPriceInput = function () {
+  var choosenType = typeInput.value;
+  priceInput.min = TYPES_PRICE[choosenType];
+  priceInput.placeholder = TYPES_PRICE[choosenType];
+};
+
+getPriceInput();
+
+var typeInputChangeHandler = function () {
+  getPriceInput();
+};
+
+typeInput.addEventListener('change', typeInputChangeHandler);
+
+var timeInInput = adForm.querySelector('#timein');
+var timeOutInput = adForm.querySelector('#timeout');
+
+var getTimeInput = function (input, value) {
+  input.value = value;
+};
+
+var timeInInputChangeHandler = function (evt) {
+  getTimeInput(timeOutInput, evt.target.value);
+};
+
+var timeOutInputChangeHandler = function (evt) {
+  getTimeInput(timeInInput, evt.target.value);
+};
+
+timeInInput.addEventListener('change', timeInInputChangeHandler);
+timeOutInput.addEventListener('change', timeOutInputChangeHandler);
+
+var roomNumberInput = adForm.querySelector('#room_number');
+var capacityInput = adForm.querySelector('#capacity');
+
+var getRoomCapacity = function () {
+  var numberRooms = roomNumberInput.value;
+
+  // булевые значения для кол-ва гостей
+  // false для дизактивации disabled
+  // 0:'для 3 гостей', 1:'для 2 гостей' , 2:'для 1 гостя', 3:'не для гостей'
+  var roomCapacity = {
+    '1': [true, true, false, true],
+    '2': [true, false, false, true],
+    '3': [false, false, false, true],
+    '100': [true, true, true, false]
+  };
+
+  var countGuests = roomCapacity[numberRooms];
+
+  for (var i = 0; i < capacityInput.length; i++) {
+    capacityInput[i].disabled = countGuests[i];
+    capacityInput[i].selected = !countGuests[i];
+  }
+};
+
+getRoomCapacity();
+
+var roomNumberChangeHandler = function () {
+  getRoomCapacity();
+};
+
+roomNumberInput.addEventListener('change', roomNumberChangeHandler);
