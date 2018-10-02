@@ -74,13 +74,12 @@ var Price = {
 
 var Pin = {
   WIDTH: 50,
-  GAP_WIDTH: 25,
-  GAP_HEIGHT: 70
+  HEIGHT: 70,
 };
 
 var MainPin = {
-  GAP_WIDTH: 33,
-  GAP_HEIGHT: 55
+  WIDTH: 65,
+  HEIGHT: 87
 };
 
 var Feature = {
@@ -164,10 +163,8 @@ var pinTemplate = document.querySelector('#pin')
 var createMapPinLayout = function (object) {
   var adPin = pinTemplate.cloneNode(true);
 
-  var coordinateX = object.location.x - Pin.GAP_WIDTH;
-  adPin.style.left = coordinateX + 'px';
-  var coordinateY = object.location.y - Pin.GAP_HEIGHT;
-  adPin.style.top = coordinateY + 'px';
+  adPin.style.left = object.location.x - Pin.WIDTH / 2 + 'px';
+  adPin.style.top = object.location.y - Pin.HEIGHT + 'px';
 
   adPin.querySelector('img').src = object.author.avatar;
   adPin.querySelector('img').alt = object.offer.title;
@@ -238,6 +235,9 @@ var setDisabled = function () {
 
 setDisabled();
 
+var MAP_FADED_CLASS_NAME = 'map--faded';
+var FORM_DISABLED_CLASS_NAME = 'ad-form--disabled';
+
 var setActive = function () {
   switchDisabled(formElements, false);
   map.classList.remove(MAP_FADED_CLASS_NAME);
@@ -245,26 +245,6 @@ var setActive = function () {
 };
 
 var mainPin = map.querySelector('.map__pin--main');
-var mainPinX = mainPin.offsetLeft;
-var mainPinY = mainPin.offsetTop;
-
-var fillAddressField = function (x, y, gap) {
-  var pinAddressX = x + gap;
-  var pinAddressY = y + gap;
-  addressInput.value = pinAddressX + ', ' + pinAddressY;
-};
-
-fillAddressField(mainPinX, mainPinY, MainPin.GAP_WIDTH);
-
-var MAP_FADED_CLASS_NAME = 'map--faded';
-var FORM_DISABLED_CLASS_NAME = 'ad-form--disabled';
-
-var getMainPinCoordinates = function () {
-  mainPin.style.left = mainPinX + 'px';
-
-  var correctY = mainPinY - MainPin.GAP_HEIGHT;
-  mainPin.style.top = correctY + 'px';
-};
 
 var pinsList = map.querySelector('.map__pins');
 
@@ -291,14 +271,74 @@ var renderSelectedAd = function () {
   }
 };
 
-var mainPinMouseUpHandler = function () {
+var fillAddressDisabledField = function (x, y) {
+  var pinX = x + MainPin.WIDTH / 2;
+  var pinY = y + MainPin.WIDTH / 2;
+  addressInput.value = pinX + ', ' + pinY;
+};
+
+var fillAddressActiveField = function (x, y) {
+  var pinX = x + MainPin.WIDTH / 2;
+  var pinY = y + MainPin.HEIGHT;
+  addressInput.value = pinX + ', ' + pinY;
+};
+
+fillAddressDisabledField(mainPin.offsetLeft, mainPin.offsetTop);
+
+var getMainPinCoordinates = function () {
+  mainPin.style.left = mainPin.offsetLeft + 'px';
+  mainPin.style.top = mainPin.offsetTop - MainPin.HEIGHT + MainPin.WIDTH / 2 + 'px';
+};
+
+var mainPinFirstMouseUpHandler = function () {
   setActive();
   getMainPinCoordinates();
   renderMapPins();
   renderSelectedAd();
+
+  mainPin.removeEventListener('mouseup', mainPinFirstMouseUpHandler);
 };
 
-mainPin.addEventListener('mouseup', mainPinMouseUpHandler);
+mainPin.addEventListener('mouseup', mainPinFirstMouseUpHandler);
+
+var mainPinMouseDownHandler = function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var mainPinMouseMoveHandler = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+    mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+  };
+
+  var mainPinMouseUpHandler = function (upEvt) {
+    upEvt.preventDefault();
+
+    map.removeEventListener('mousemove', mainPinMouseMoveHandler);
+    map.removeEventListener('mouseup', mainPinMouseUpHandler);
+    fillAddressActiveField(mainPin.offsetLeft, mainPin.offsetTop);
+  };
+
+  map.addEventListener('mousemove', mainPinMouseMoveHandler);
+  map.addEventListener('mouseup', mainPinMouseUpHandler);
+};
+
+mainPin.addEventListener('mousedown', mainPinMouseDownHandler);
 
 // adForm.action = 'https://js.dump.academy/keksobooking';
 
