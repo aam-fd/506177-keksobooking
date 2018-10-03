@@ -51,10 +51,10 @@ var APARTAMENT_PHOTOS = [
 ];
 
 var Position = {
-  MIN_X: 33,
-  MAX_X: 1167,
-  MIN_Y: 67,
-  MAX_Y: 610
+  MIN_X: 0,
+  MAX_X: 1200,
+  MIN_Y: 130,
+  MAX_Y: 630
 };
 
 var Guest = {
@@ -322,20 +322,35 @@ var onMainPinMouseDown = function (evt) {
       y: moveEvt.clientY
     };
 
+    if (moveEvt.clientX < map.getBoundingClientRect().left + MainPin.WIDTH ||
+        moveEvt.clientX > map.getBoundingClientRect().right - MainPin.WIDTH ||
+        moveEvt.clientY < Position.MIN_Y ||
+        moveEvt.clientY > Position.MAX_Y) {
+
+      stopMoveMainPin();
+
+    }
+
     mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
     mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+
   };
 
   var onMainPinMouseUp = function (upEvt) {
     upEvt.preventDefault();
 
-    map.removeEventListener('mousemove', onMainPinMouseMove);
-    map.removeEventListener('mouseup', onMainPinMouseUp);
+    stopMoveMainPin();
+
     fillAddressActiveField(mainPin.offsetLeft, mainPin.offsetTop);
   };
 
   map.addEventListener('mousemove', onMainPinMouseMove);
   map.addEventListener('mouseup', onMainPinMouseUp);
+
+  var stopMoveMainPin = function () {
+    map.removeEventListener('mousemove', onMainPinMouseMove);
+    map.removeEventListener('mouseup', onMainPinMouseUp);
+  };
 };
 
 mainPin.addEventListener('mousedown', onMainPinMouseDown);
