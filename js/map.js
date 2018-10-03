@@ -51,10 +51,10 @@ var APARTAMENT_PHOTOS = [
 ];
 
 var Position = {
-  MIN_X: 0,
-  MAX_X: 1200,
-  MIN_Y: 130,
-  MAX_Y: 630
+  MIN_X: 33,
+  MAX_X: 1167,
+  MIN_Y: 67,
+  MAX_Y: 610
 };
 
 var Guest = {
@@ -258,7 +258,7 @@ var renderAdCard = function (selectedAd) {
   map.insertBefore(createAdCard(selectedAd), mapFilterContainer);
 };
 
-var pinClickHandler = function (evt) {
+var onPinClick = function (evt) {
   var clickedElement = evt.target.id;
   var selectedAd = adsDescriptions[clickedElement];
   renderAdCard(selectedAd);
@@ -267,7 +267,7 @@ var pinClickHandler = function (evt) {
 var renderSelectedAd = function () {
   var pinElements = document.querySelectorAll('.map__pin');
   for (var i = 1; i < pinElements.length; i++) {
-    pinElements[i].addEventListener('click', pinClickHandler);
+    pinElements[i].addEventListener('click', onPinClick);
   }
 };
 
@@ -290,18 +290,18 @@ var getMainPinCoordinates = function () {
   mainPin.style.top = mainPin.offsetTop - MainPin.HEIGHT + MainPin.WIDTH / 2 + 'px';
 };
 
-var mainPinFirstMouseUpHandler = function () {
+var onMainPinFirstMouseUp = function () {
   setActive();
   getMainPinCoordinates();
   renderMapPins();
   renderSelectedAd();
 
-  mainPin.removeEventListener('mouseup', mainPinFirstMouseUpHandler);
+  mainPin.removeEventListener('mouseup', onMainPinFirstMouseUp);
 };
 
-mainPin.addEventListener('mouseup', mainPinFirstMouseUpHandler);
+mainPin.addEventListener('mouseup', onMainPinFirstMouseUp);
 
-var mainPinMouseDownHandler = function (evt) {
+var onMainPinMouseDown = function (evt) {
   evt.preventDefault();
 
   var startCoords = {
@@ -309,7 +309,7 @@ var mainPinMouseDownHandler = function (evt) {
     y: evt.clientY
   };
 
-  var mainPinMouseMoveHandler = function (moveEvt) {
+  var onMainPinMouseMove = function (moveEvt) {
     moveEvt.preventDefault();
 
     var shift = {
@@ -326,19 +326,19 @@ var mainPinMouseDownHandler = function (evt) {
     mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
   };
 
-  var mainPinMouseUpHandler = function (upEvt) {
+  var onMainPinMouseUp = function (upEvt) {
     upEvt.preventDefault();
 
-    map.removeEventListener('mousemove', mainPinMouseMoveHandler);
-    map.removeEventListener('mouseup', mainPinMouseUpHandler);
+    map.removeEventListener('mousemove', onMainPinMouseMove);
+    map.removeEventListener('mouseup', onMainPinMouseUp);
     fillAddressActiveField(mainPin.offsetLeft, mainPin.offsetTop);
   };
 
-  map.addEventListener('mousemove', mainPinMouseMoveHandler);
-  map.addEventListener('mouseup', mainPinMouseUpHandler);
+  map.addEventListener('mousemove', onMainPinMouseMove);
+  map.addEventListener('mouseup', onMainPinMouseUp);
 };
 
-mainPin.addEventListener('mousedown', mainPinMouseDownHandler);
+mainPin.addEventListener('mousedown', onMainPinMouseDown);
 
 // adForm.action = 'https://js.dump.academy/keksobooking';
 
@@ -346,11 +346,11 @@ var selectInvalidFieldForm = function (field) {
   field.classList.add('ad-form__error');
 };
 
-var formInvalidHandler = function (evt) {
+var onInvalidFieldsSelect = function (evt) {
   selectInvalidFieldForm(evt.target);
 };
 
-adForm.addEventListener('invalid', formInvalidHandler, true);
+adForm.addEventListener('invalid', onInvalidFieldsSelect, true);
 
 var typeInput = adForm.querySelector('#type');
 var priceInput = adForm.querySelector('#price');
@@ -363,11 +363,11 @@ var getPriceInput = function () {
 
 getPriceInput();
 
-var typeInputChangeHandler = function () {
+var onTypeInputChange = function () {
   getPriceInput();
 };
 
-typeInput.addEventListener('change', typeInputChangeHandler);
+typeInput.addEventListener('change', onTypeInputChange);
 
 var timeInInput = adForm.querySelector('#timein');
 var timeOutInput = adForm.querySelector('#timeout');
@@ -376,16 +376,16 @@ var getTimeInput = function (input, value) {
   input.value = value;
 };
 
-var timeInInputChangeHandler = function (evt) {
+var onTimeInInputChange = function (evt) {
   getTimeInput(timeOutInput, evt.target.value);
 };
 
-var timeOutInputChangeHandler = function (evt) {
+var onTimeOutInputChange = function (evt) {
   getTimeInput(timeInInput, evt.target.value);
 };
 
-timeInInput.addEventListener('change', timeInInputChangeHandler);
-timeOutInput.addEventListener('change', timeOutInputChangeHandler);
+timeInInput.addEventListener('change', onTimeInInputChange);
+timeOutInput.addEventListener('change', onTimeOutInputChange);
 
 var roomNumberInput = adForm.querySelector('#room_number');
 var capacityInput = adForm.querySelector('#capacity');
