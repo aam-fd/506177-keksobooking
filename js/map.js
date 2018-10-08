@@ -304,36 +304,35 @@ mainPin.addEventListener('mouseup', onMainPinFirstMouseUp);
 var onMainPinMouseDown = function (evt) {
   evt.preventDefault();
 
-  var startCoords = {
-    x: evt.clientX,
-    y: evt.clientY
+  var coords = {
+    x: evt.pageX,
+    y: evt.pageY
   };
 
   var onMainPinMouseMove = function (moveEvt) {
     moveEvt.preventDefault();
 
     var shift = {
-      x: startCoords.x - moveEvt.clientX,
-      y: startCoords.y - moveEvt.clientY
+      x: coords.x - moveEvt.pageX,
+      y: coords.y - moveEvt.pageY
     };
 
-    startCoords = {
-      x: moveEvt.clientX,
-      y: moveEvt.clientY
+    coords = {
+      x: moveEvt.pageX,
+      y: moveEvt.pageY
     };
 
-    if (moveEvt.clientX < map.getBoundingClientRect().left + MainPin.WIDTH ||
-        moveEvt.clientX > map.getBoundingClientRect().right - MainPin.WIDTH ||
-        moveEvt.clientY < Position.MIN_Y ||
-        moveEvt.clientY > Position.MAX_Y) {
+    if (moveEvt.pageX > map.getBoundingClientRect().left + MainPin.WIDTH / 2 &&
+        moveEvt.pageX < map.getBoundingClientRect().right - MainPin.WIDTH / 2 &&
+        moveEvt.pageY > Position.MIN_Y &&
+        moveEvt.pageY < Position.MAX_Y) {
 
-      stopMoveMainPin();
+      fillAddressActiveField(mainPin.offsetLeft, mainPin.offsetTop);
+
+      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
 
     }
-
-    mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
-    mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
-
   };
 
   var onMainPinMouseUp = function (upEvt) {
@@ -344,12 +343,12 @@ var onMainPinMouseDown = function (evt) {
     fillAddressActiveField(mainPin.offsetLeft, mainPin.offsetTop);
   };
 
-  map.addEventListener('mousemove', onMainPinMouseMove);
-  map.addEventListener('mouseup', onMainPinMouseUp);
+  document.addEventListener('mousemove', onMainPinMouseMove);
+  document.addEventListener('mouseup', onMainPinMouseUp);
 
   var stopMoveMainPin = function () {
-    map.removeEventListener('mousemove', onMainPinMouseMove);
-    map.removeEventListener('mouseup', onMainPinMouseUp);
+    document.removeEventListener('mousemove', onMainPinMouseMove);
+    document.removeEventListener('mouseup', onMainPinMouseUp);
   };
 };
 
