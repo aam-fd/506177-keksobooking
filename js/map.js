@@ -74,13 +74,12 @@ var Price = {
 
 var Pin = {
   WIDTH: 50,
-  GAP_WIDTH: 25,
-  GAP_HEIGHT: 70
+  HEIGHT: 70,
 };
 
 var MainPin = {
-  GAP_WIDTH: 33,
-  GAP_HEIGHT: 55
+  WIDTH: 65,
+  HEIGHT: 87
 };
 
 var Feature = {
@@ -164,10 +163,8 @@ var pinTemplate = document.querySelector('#pin')
 var createMapPinLayout = function (object) {
   var adPin = pinTemplate.cloneNode(true);
 
-  var coordinateX = object.location.x - Pin.GAP_WIDTH;
-  adPin.style.left = coordinateX + 'px';
-  var coordinateY = object.location.y - Pin.GAP_HEIGHT;
-  adPin.style.top = coordinateY + 'px';
+  adPin.style.left = object.location.x - Pin.WIDTH / 2 + 'px';
+  adPin.style.top = object.location.y - Pin.HEIGHT + 'px';
 
   adPin.querySelector('img').src = object.author.avatar;
   adPin.querySelector('img').alt = object.offer.title;
@@ -238,6 +235,9 @@ var setDisabled = function () {
 
 setDisabled();
 
+var MAP_FADED_CLASS_NAME = 'map--faded';
+var FORM_DISABLED_CLASS_NAME = 'ad-form--disabled';
+
 var setActive = function () {
   switchDisabled(formElements, false);
   map.classList.remove(MAP_FADED_CLASS_NAME);
@@ -245,26 +245,6 @@ var setActive = function () {
 };
 
 var mainPin = map.querySelector('.map__pin--main');
-var mainPinX = mainPin.offsetLeft;
-var mainPinY = mainPin.offsetTop;
-
-var fillAddressField = function (x, y, gap) {
-  var pinAddressX = x + gap;
-  var pinAddressY = y + gap;
-  addressInput.value = pinAddressX + ', ' + pinAddressY;
-};
-
-fillAddressField(mainPinX, mainPinY, MainPin.GAP_WIDTH);
-
-var MAP_FADED_CLASS_NAME = 'map--faded';
-var FORM_DISABLED_CLASS_NAME = 'ad-form--disabled';
-
-var getMainPinCoordinates = function () {
-  mainPin.style.left = mainPinX + 'px';
-
-  var correctY = mainPinY - MainPin.GAP_HEIGHT;
-  mainPin.style.top = correctY + 'px';
-};
 
 var pinsList = map.querySelector('.map__pins');
 
@@ -278,7 +258,7 @@ var renderAdCard = function (selectedAd) {
   map.insertBefore(createAdCard(selectedAd), mapFilterContainer);
 };
 
-var pinClickHandler = function (evt) {
+var onPinClick = function (evt) {
   var clickedElement = evt.target.id;
   var selectedAd = adsDescriptions[clickedElement];
   renderAdCard(selectedAd);
@@ -287,18 +267,92 @@ var pinClickHandler = function (evt) {
 var renderSelectedAd = function () {
   var pinElements = document.querySelectorAll('.map__pin');
   for (var i = 1; i < pinElements.length; i++) {
-    pinElements[i].addEventListener('click', pinClickHandler);
+    pinElements[i].addEventListener('click', onPinClick);
   }
 };
 
-var mainPinMouseUpHandler = function () {
+var fillAddressDisabledField = function (x, y) {
+  var pinX = x + MainPin.WIDTH / 2;
+  var pinY = y + MainPin.WIDTH / 2;
+  addressInput.value = pinX + ', ' + pinY;
+};
+
+var fillAddressActiveField = function (x, y) {
+  var pinX = x + MainPin.WIDTH / 2;
+  var pinY = y + MainPin.HEIGHT;
+  addressInput.value = pinX + ', ' + pinY;
+};
+
+fillAddressDisabledField(mainPin.offsetLeft, mainPin.offsetTop);
+
+var getMainPinCoordinates = function () {
+  mainPin.style.left = mainPin.offsetLeft + 'px';
+  mainPin.style.top = mainPin.offsetTop - MainPin.HEIGHT + MainPin.WIDTH / 2 + 'px';
+};
+
+var onMainPinFirstMouseUp = function () {
   setActive();
   getMainPinCoordinates();
   renderMapPins();
   renderSelectedAd();
+
+  mainPin.removeEventListener('mouseup', onMainPinFirstMouseUp);
 };
 
-mainPin.addEventListener('mouseup', mainPinMouseUpHandler);
+mainPin.addEventListener('mouseup', onMainPinFirstMouseUp);
+
+var onMainPinMouseDown = function (evt) {
+  evt.preventDefault();
+
+  var coords = {
+    x: evt.pageX,
+    y: evt.pageY
+  };
+
+  var onMainPinMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: coords.x - moveEvt.pageX,
+      y: coords.y - moveEvt.pageY
+    };
+
+    coords = {
+      x: moveEvt.pageX,
+      y: moveEvt.pageY
+    };
+
+    if (moveEvt.pageX > map.getBoundingClientRect().left + MainPin.WIDTH / 2 &&
+        moveEvt.pageX < map.getBoundingClientRect().right - MainPin.WIDTH / 2 &&
+        moveEvt.pageY > Position.MIN_Y &&
+        moveEvt.pageY < Position.MAX_Y) {
+
+      fillAddressActiveField(mainPin.offsetLeft, mainPin.offsetTop);
+
+      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+
+    }
+  };
+
+  var onMainPinMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    stopMoveMainPin();
+
+    fillAddressActiveField(mainPin.offsetLeft, mainPin.offsetTop);
+  };
+
+  document.addEventListener('mousemove', onMainPinMouseMove);
+  document.addEventListener('mouseup', onMainPinMouseUp);
+
+  var stopMoveMainPin = function () {
+    document.removeEventListener('mousemove', onMainPinMouseMove);
+    document.removeEventListener('mouseup', onMainPinMouseUp);
+  };
+};
+
+mainPin.addEventListener('mousedown', onMainPinMouseDown);
 
 // adForm.action = 'https://js.dump.academy/keksobooking';
 
@@ -306,11 +360,11 @@ var selectInvalidFieldForm = function (field) {
   field.classList.add('ad-form__error');
 };
 
-var formInvalidHandler = function (evt) {
+var onInvalidFieldsSelect = function (evt) {
   selectInvalidFieldForm(evt.target);
 };
 
-adForm.addEventListener('invalid', formInvalidHandler, true);
+adForm.addEventListener('invalid', onInvalidFieldsSelect, true);
 
 var typeInput = adForm.querySelector('#type');
 var priceInput = adForm.querySelector('#price');
@@ -323,11 +377,11 @@ var getPriceInput = function () {
 
 getPriceInput();
 
-var typeInputChangeHandler = function () {
+var onTypeInputChange = function () {
   getPriceInput();
 };
 
-typeInput.addEventListener('change', typeInputChangeHandler);
+typeInput.addEventListener('change', onTypeInputChange);
 
 var timeInInput = adForm.querySelector('#timein');
 var timeOutInput = adForm.querySelector('#timeout');
@@ -336,16 +390,16 @@ var getTimeInput = function (input, value) {
   input.value = value;
 };
 
-var timeInInputChangeHandler = function (evt) {
+var onTimeInInputChange = function (evt) {
   getTimeInput(timeOutInput, evt.target.value);
 };
 
-var timeOutInputChangeHandler = function (evt) {
+var onTimeOutInputChange = function (evt) {
   getTimeInput(timeInInput, evt.target.value);
 };
 
-timeInInput.addEventListener('change', timeInInputChangeHandler);
-timeOutInput.addEventListener('change', timeOutInputChangeHandler);
+timeInInput.addEventListener('change', onTimeInInputChange);
+timeOutInput.addEventListener('change', onTimeOutInputChange);
 
 var roomNumberInput = adForm.querySelector('#room_number');
 var capacityInput = adForm.querySelector('#capacity');
