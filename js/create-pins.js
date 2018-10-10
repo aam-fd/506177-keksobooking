@@ -8,8 +8,8 @@
   };
 
   var pinTemplate = document.querySelector('#pin')
-    .content
-    .querySelector('.map__pin');
+                            .content
+                            .querySelector('.map__pin');
 
   var createPinLayout = function (object) {
     var adPin = pinTemplate.cloneNode(true);

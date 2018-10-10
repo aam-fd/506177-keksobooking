@@ -2,6 +2,13 @@
 
 (function () {
 
+  var TYPES_PRICE = {
+    palace: 10000,
+    flat: 1000,
+    house: 5000,
+    bungalo: 0
+  };
+
   // adForm.action = 'https://js.dump.academy/keksobooking';
   var adForm = document.querySelector('.ad-form');
   var addressInput = adForm.querySelector('#address');
@@ -10,21 +17,36 @@
     field.classList.add('ad-form__error');
   };
 
-  var TYPES_PRICE = {
-    palace: 10000,
-    flat: 1000,
-    house: 5000,
-    bungalo: 0
+  var onInvalidFieldsSelect = function (evt) {
+    selectInvalidFieldForm(evt.target);
   };
 
   var typeInput = adForm.querySelector('#type');
   var priceInput = adForm.querySelector('#price');
+
+  var getPriceInput = function () {
+    var choosenType = typeInput.value;
+    priceInput.min = TYPES_PRICE[choosenType];
+    priceInput.placeholder = TYPES_PRICE[choosenType];
+  };
+
+  var onTypeInputChange = function () {
+    getPriceInput();
+  };
 
   var timeInInput = adForm.querySelector('#timein');
   var timeOutInput = adForm.querySelector('#timeout');
 
   var getTimeInput = function (input, value) {
     input.value = value;
+  };
+
+  var onTimeInInputChange = function (evt) {
+    getTimeInput(timeOutInput, evt.target.value);
+  };
+
+  var onTimeOutInputChange = function (evt) {
+    getTimeInput(timeInInput, evt.target.value);
   };
 
   var roomNumberInput = adForm.querySelector('#room_number');
@@ -51,6 +73,9 @@
     }
   };
 
+  var onRoomNumberChange = function () {
+    getRoomCapacity();
+  };
 
   var fillAddressDisabledField = function () {
     var pinX = window.map.mainPin.offsetLeft + window.map.MainPin.WIDTH / 2;
@@ -63,33 +88,6 @@
     var pinY = window.map.mainPin.offsetTop + window.map.MainPin.HEIGHT;
     addressInput.value = pinX + ', ' + pinY;
   };
-
-  var onInvalidFieldsSelect = function (evt) {
-    selectInvalidFieldForm(evt.target);
-  };
-
-  var getPriceInput = function () {
-    var choosenType = typeInput.value;
-    priceInput.min = TYPES_PRICE[choosenType];
-    priceInput.placeholder = TYPES_PRICE[choosenType];
-  };
-
-  var onTypeInputChange = function () {
-    getPriceInput();
-  };
-
-  var onTimeInInputChange = function (evt) {
-    getTimeInput(timeOutInput, evt.target.value);
-  };
-
-  var onTimeOutInputChange = function (evt) {
-    getTimeInput(timeInInput, evt.target.value);
-  };
-
-  var onRoomNumberChange = function () {
-    getRoomCapacity();
-  };
-
 
   window.form = {
     adForm: adForm,

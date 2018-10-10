@@ -9,7 +9,8 @@
     bungalo: 'Бунгало'
   };
 
-  var cardTemplate = document.querySelector('#card').content;
+  var cardTemplate = document.querySelector('#card')
+                             .content;
 
   var createCardLayout = function (object) {
     var cardLayout = cardTemplate.cloneNode(true);
