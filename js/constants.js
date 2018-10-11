@@ -21,6 +21,10 @@ window.constants = (function () {
       HEIGHT: 87
     },
 
+    MAP_FADED: 'map--faded',
+
+    FORM_DISABLED: 'ad-form--disabled',
+
   };
 
 })();

@@ -16,13 +16,10 @@
     switchDisabled(formElements, true);
   };
 
-  var MAP_FADED_CLASS_NAME = 'map--faded';
-  var FORM_DISABLED_CLASS_NAME = 'ad-form--disabled';
-
   var setActive = function () {
     switchDisabled(formElements, false);
-    area.classList.remove(MAP_FADED_CLASS_NAME);
-    window.form.adForm.classList.remove(FORM_DISABLED_CLASS_NAME);
+    area.classList.remove(window.constants.MAP_FADED);
+    window.form.adForm.classList.remove(window.constants.FORM_DISABLED);
   };
 
   var shiftToPinTail = function () {
@@ -44,7 +41,7 @@
     var pinX = element.offsetLeft + elementSize.WIDTH / 2;
     var pinY;
 
-    if (area.classList.contains(MAP_FADED_CLASS_NAME)) {
+    if (area.classList.contains(window.constants.MAP_FADED)) {
       pinY = element.offsetTop + elementSize.WIDTH / 2;
     } else {
       pinY = element.offsetTop + elementSize.HEIGHT;
