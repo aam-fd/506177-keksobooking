@@ -1,35 +1,32 @@
 'use strict';
 
-(function () {
+window.util = (function () {
 
-  var getRandomNumber = function (min, max) {
-    return Math.round(min + Math.random() * (max - min));
-  };
+  return {
 
-  var getRandomArrayElement = function (array) {
-    var randomArrayIndex = getRandomNumber(0, array.length - 1);
-    return array[randomArrayIndex];
-  };
+    getRandomNumber: function (min, max) {
+      return Math.round(min + Math.random() * (max - min));
+    },
 
-  var shuffleArray = function (array) {
-    var j;
-    var mixedArray = [];
+    getRandomArrayElement: function (array) {
+      var randomArrayIndex = this.getRandomNumber(0, array.length - 1);
+      return array[randomArrayIndex];
+    },
 
-    for (var i = array.length - 1; i >= 0; i--) {
-      j = Math.floor(Math.random() * (i + 1));
-      var x = array[i];
-      array[i] = array[j];
-      array[j] = x;
-      mixedArray[i] = array[i];
-    }
+    shuffleArray: function (array) {
+      var j;
+      var mixedArray = [];
 
-    return mixedArray;
-  };
+      for (var i = array.length - 1; i >= 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        var x = array[i];
+        array[i] = array[j];
+        array[j] = x;
+        mixedArray[i] = array[i];
+      }
 
-  window.util = {
-    getRandomNumber: getRandomNumber,
-    getRandomArrayElement: getRandomArrayElement,
-    shuffleArray: shuffleArray,
+      return mixedArray;
+    },
   };
 
 })();

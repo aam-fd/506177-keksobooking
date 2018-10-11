@@ -10,6 +10,7 @@
   };
 
   // adForm.action = 'https://js.dump.academy/keksobooking';
+
   var adForm = document.querySelector('.ad-form');
   var addressInput = adForm.querySelector('#address');
 
@@ -77,36 +78,24 @@
     getRoomCapacity();
   };
 
-  var fillAddressDisabledField = function () {
-    var pinX = window.map.mainPin.offsetLeft + window.map.MainPin.WIDTH / 2;
-    var pinY = window.map.mainPin.offsetTop + window.map.MainPin.WIDTH / 2;
+  var fillAddress = function (element, elementSize) {
+    var pinX = element.offsetLeft + elementSize.WIDTH / 2;
+    var pinY = element.offsetTop + elementSize.WIDTH / 2;
     addressInput.value = pinX + ', ' + pinY;
   };
 
-  var fillAddressActiveField = function () {
-    var pinX = window.map.mainPin.offsetLeft + window.map.MainPin.WIDTH / 2;
-    var pinY = window.map.mainPin.offsetTop + window.map.MainPin.HEIGHT;
-    addressInput.value = pinX + ', ' + pinY;
-  };
+  getPriceInput();
+  getRoomCapacity();
+
+  adForm.addEventListener('invalid', onInvalidFieldsSelect, true);
+  typeInput.addEventListener('change', onTypeInputChange);
+  timeInInput.addEventListener('change', onTimeInInputChange);
+  timeOutInput.addEventListener('change', onTimeOutInputChange);
+  roomNumberInput.addEventListener('change', onRoomNumberChange);
 
   window.form = {
     adForm: adForm,
-    typeInput: typeInput,
-    timeInInput: timeInInput,
-    timeOutInput: timeOutInput,
-    roomNumberInput: roomNumberInput,
-
-    fillAddressDisabledField: fillAddressDisabledField,
-    fillAddressActiveField: fillAddressActiveField,
-
-    getPriceInput: getPriceInput,
-    getRoomCapacity: getRoomCapacity,
-
-    onInvalidFieldsSelect: onInvalidFieldsSelect,
-    onTypeInputChange: onTypeInputChange,
-    onTimeInInputChange: onTimeInInputChange,
-    onTimeOutInputChange: onTimeOutInputChange,
-    onRoomNumberChange: onRoomNumberChange,
+    fillAddress: fillAddress,
   };
 
 })();

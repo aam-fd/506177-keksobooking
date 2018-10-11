@@ -45,13 +45,6 @@
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
   ];
 
-  var Position = {
-    MIN_X: 0,
-    MAX_X: 1200,
-    MIN_Y: 130,
-    MAX_Y: 630
-  };
-
   var Guest = {
     MIN: 1,
     MAX: 10
@@ -75,8 +68,8 @@
   var createAdsDescriptions = function () {
     var ads = [];
     for (var i = 0; i < ADS_NUMBER; i++) {
-      var hostX = window.util.getRandomNumber(Position.MIN_X, Position.MAX_X);
-      var hostY = window.util.getRandomNumber(Position.MIN_Y, Position.MAX_Y);
+      var hostX = window.util.getRandomNumber(window.constants.Position.MIN_X, window.constants.Position.MAX_X);
+      var hostY = window.util.getRandomNumber(window.constants.Position.MIN_Y, window.constants.Position.MAX_Y);
 
       ads.push({
         author: {
@@ -108,11 +101,8 @@
     return ads;
   };
 
-  var adsDescriptions = createAdsDescriptions();
-
   window.data = {
-    adsDescriptions: adsDescriptions,
-    Position: Position,
+    adsDescriptions: createAdsDescriptions(),
   };
 
 })();

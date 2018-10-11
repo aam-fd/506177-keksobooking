@@ -38,12 +38,40 @@
     return cardLayout;
   };
 
-  window.createCard = function (object) {
-    var card = createCardLayout(object);
-    var adFragment = document.createDocumentFragment();
-    adFragment.appendChild(card);
+  var createCardFragment = function (object) {
+    var cardLayout = createCardLayout(object);
+    var cardFragment = document.createDocumentFragment();
+    cardFragment.appendChild(cardLayout);
 
-    return adFragment;
+    return cardFragment;
+  };
+
+  var createCard = function (ad) {
+    var mapCard = document.querySelector('.map__card');
+
+    if (mapCard !== null) {
+      window.map.area.replaceChild(createCardFragment(ad), mapCard);
+    } else {
+      window.map.area.appendChild(createCardFragment(ad));
+    }
+  };
+
+  var onPinClick = function (evt) {
+    var clickedElement = evt.target.id;
+    var selectedAd = window.data.adsDescriptions[clickedElement];
+
+    createCard(selectedAd);
+  };
+
+  window.card = {
+
+    render: function () {
+      var pinElements = document.querySelectorAll('.map__pin');
+
+      for (var i = 1; i < pinElements.length; i++) {
+        pinElements[i].addEventListener('click', onPinClick);
+      }
+    },
   };
 
 })();
