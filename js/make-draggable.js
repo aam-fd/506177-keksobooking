@@ -28,7 +28,7 @@
           moveEvt.pageY > window.constants.Position.MIN_Y &&
           moveEvt.pageY < window.constants.Position.MAX_Y) {
 
-        window.form.fillAddress(window.map.mainPin, window.constants.MainPin);
+        window.map.fillAddress(window.map.mainPin, window.constants.MainPin);
 
         window.map.mainPin.style.left = (window.map.mainPin.offsetLeft - shift.x) + 'px';
         window.map.mainPin.style.top = (window.map.mainPin.offsetTop - shift.y) + 'px';
@@ -41,7 +41,7 @@
 
       stopMove();
 
-      window.form.fillAddress(window.map.mainPin, window.constants.MainPin);
+      window.map.fillAddress(window.map.mainPin, window.constants.MainPin);
     };
 
     document.addEventListener('mousemove', onMouseMove);
@@ -53,6 +53,8 @@
     };
   };
 
-  window.map.mainPin.addEventListener('mousedown', onMouseDown);
+  window.makeDraggable = {
+    onMouseDown: onMouseDown,
+  };
 
 })();

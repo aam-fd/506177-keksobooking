@@ -38,17 +38,30 @@
     mainPin.removeEventListener('mouseup', onMainPinFirstMouseUp);
   };
 
+  var addressInput = window.form.adForm.querySelector('#address');
+
+  var fillAddress = function (element, elementSize) {
+    var pinX = element.offsetLeft + elementSize.WIDTH / 2;
+    var pinY;
+
+    if (area.classList.contains(MAP_FADED_CLASS_NAME)) {
+      pinY = element.offsetTop + elementSize.WIDTH / 2;
+    } else {
+      pinY = element.offsetTop + elementSize.HEIGHT;
+    }
+    addressInput.value = pinX + ', ' + pinY;
+  };
+
   setDisabled();
-  window.form.fillAddress(mainPin, window.constants.MainPin);
+  fillAddress(mainPin, window.constants.MainPin);
 
   mainPin.addEventListener('mouseup', onMainPinFirstMouseUp);
-
-  // mainPin.addEventListener('mousedown', window.onMouseDown);
-  // window.makeDraggable(mainPin);
+  mainPin.addEventListener('mousedown', window.makeDraggable.onMouseDown);
 
   window.map = {
     area: area,
     mainPin: mainPin,
+    fillAddress: fillAddress,
   };
 
 })();

@@ -12,7 +12,6 @@
   // adForm.action = 'https://js.dump.academy/keksobooking';
 
   var adForm = document.querySelector('.ad-form');
-  var addressInput = adForm.querySelector('#address');
 
   var selectInvalidFieldForm = function (field) {
     field.classList.add('ad-form__error');
@@ -78,12 +77,6 @@
     getRoomCapacity();
   };
 
-  var fillAddress = function (element, elementSize) {
-    var pinX = element.offsetLeft + elementSize.WIDTH / 2;
-    var pinY = element.offsetTop + elementSize.WIDTH / 2;
-    addressInput.value = pinX + ', ' + pinY;
-  };
-
   getPriceInput();
   getRoomCapacity();
 
@@ -95,7 +88,6 @@
 
   window.form = {
     adForm: adForm,
-    fillAddress: fillAddress,
   };
 
 })();
