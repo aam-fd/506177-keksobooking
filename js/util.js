@@ -8,8 +8,8 @@ window.util = (function () {
       return Math.round(min + Math.random() * (max - min));
     },
 
-    getRandomArrayElement: function (array) {
-      var randomArrayIndex = this.getRandomNumber(0, array.length - 1);
+    getRandomArrayElement: function (array, callback) {
+      var randomArrayIndex = callback(0, array.length - 1);
       return array[randomArrayIndex];
     },
 
@@ -26,6 +26,16 @@ window.util = (function () {
       }
 
       return mixedArray;
+    },
+
+    switchDisabled: function (elementArray, state) {
+      for (var i = 0; i < elementArray.length; i++) {
+        elementArray[i].disabled = state;
+      }
+    },
+
+    removeClass: function (element, elementClass) {
+      element.classList.remove(elementClass);
     },
   };
 
