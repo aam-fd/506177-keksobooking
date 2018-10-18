@@ -12,6 +12,11 @@
   // adForm.action = 'https://js.dump.academy/keksobooking';
 
   var adForm = document.querySelector('.ad-form');
+  var addressInput = adForm.querySelector('#address');
+
+  var fillAddress = function (callback) {
+    addressInput.value = callback;
+  };
 
   var selectInvalidFieldForm = function (field) {
     field.classList.add('ad-form__error');
@@ -88,6 +93,7 @@
 
   window.form = {
     adForm: adForm,
+    fillAddress: fillAddress,
   };
 
 })();
