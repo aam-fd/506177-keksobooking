@@ -67,9 +67,16 @@
 
   var createAdsDescriptions = function () {
     var ads = [];
+
+    var getRandomNumber = window.util.getRandomNumber;
+    var getRandomElement = window.util.getRandomArrayElement;
+    var shuffleArray = window.util.shuffleArray;
+    var area = window.constants.Area;
+
+
     for (var i = 0; i < ADS_NUMBER; i++) {
-      var hostX = window.util.getRandomNumber(window.constants.Position.MIN_X, window.constants.Position.MAX_X);
-      var hostY = window.util.getRandomNumber(window.constants.Position.MIN_Y, window.constants.Position.MAX_Y);
+      var hostX = getRandomNumber(area.MIN_X, area.MAX_X);
+      var hostY = getRandomNumber(area.MIN_Y, area.MAX_Y);
 
       ads.push({
         author: {
@@ -79,15 +86,15 @@
         offer: {
           title: TITLES[i],
           address: hostX + ', ' + hostY,
-          price: window.util.getRandomNumber(Price.MIN, Price.MAX),
-          type: window.util.getRandomArrayElement(TYPES),
-          rooms: window.util.getRandomNumber(Room.MIN, Room.MAX),
-          guests: window.util.getRandomNumber(Guest.MIN, Guest.MAX),
-          checkin: window.util.getRandomArrayElement(CHECK_TIMES),
-          checkout: window.util.getRandomArrayElement(CHECK_TIMES),
-          features: OTHER_FEATURES.slice(0, window.util.getRandomNumber(Feature.MIN, Feature.MAX)),
+          price: getRandomNumber(Price.MIN, Price.MAX),
+          type: getRandomElement(TYPES, getRandomNumber),
+          rooms: getRandomNumber(Room.MIN, Room.MAX),
+          guests: getRandomNumber(Guest.MIN, Guest.MAX),
+          checkin: getRandomElement(CHECK_TIMES, getRandomNumber),
+          checkout: getRandomElement(CHECK_TIMES, getRandomNumber),
+          features: OTHER_FEATURES.slice(0, getRandomNumber(Feature.MIN, Feature.MAX)),
           description: '',
-          photos: window.util.shuffleArray(APARTAMENT_PHOTOS),
+          photos: shuffleArray(APARTAMENT_PHOTOS),
         },
 
         location: {

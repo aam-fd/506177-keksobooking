@@ -4,19 +4,19 @@ window.constants = (function () {
 
   return {
 
-    Position: {
+    Area: {
       MIN_X: 0,
       MAX_X: 1200,
       MIN_Y: 130,
       MAX_Y: 630
     },
 
-    Pin: {
+    PinSize: {
       WIDTH: 50,
       HEIGHT: 70,
     },
 
-    MainPin: {
+    MainPinSize: {
       WIDTH: 65,
       HEIGHT: 87
     },
