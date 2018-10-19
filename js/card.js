@@ -61,8 +61,9 @@
       return cardFragment;
     },
 
-    close: function (button, callback) {
-      button.addEventListener('click', callback);
+    onCloseCardClick: function (callback) {
+      var closeButton = document.querySelector('.popup__close');
+      closeButton.addEventListener('click', callback);
     },
 
   };
