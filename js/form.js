@@ -14,8 +14,8 @@
   var adForm = document.querySelector('.ad-form');
   var addressInput = adForm.querySelector('#address');
 
-  var fillAddress = function (callback) {
-    addressInput.value = callback;
+  var fillAddress = function (value) {
+    addressInput.value = value;
   };
 
   var selectInvalidFieldForm = function (field) {

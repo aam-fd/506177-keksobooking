@@ -21,16 +21,15 @@
   var descriptions = window.data.adsDescriptions;
 
   var createAd = window.card.create;
-  var close = window.card.close;
+  var onCloseCardClick = window.card.onCloseCardClick;
   var createPin = window.pin.create;
-  var clickedPin = window.pin.getClickedPin;
 
   var deleteCard = function () {
     var mapCard = document.querySelector('.map__card');
     area.removeChild(mapCard);
   };
 
-  var onCloseButton = function () {
+  var onCloseButtonClick = function () {
     deleteCard();
   };
 
@@ -45,10 +44,10 @@
   };
 
   var onPinClick = function (evt) {
-    var selectedAd = descriptions[clickedPin(evt)];
+    var selectedAd = descriptions[evt.target.id];
     renderAd(selectedAd);
-    var closeButton = document.querySelector('.popup__close');
-    close(closeButton, onCloseButton);
+
+    onCloseCardClick(onCloseButtonClick);
   };
 
   var renderSelectedAd = function () {

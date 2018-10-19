@@ -27,10 +27,6 @@
     return pin;
   };
 
-  var getClickedPin = function (evt) {
-    return evt.target.id;
-  };
-
   window.pin = {
 
     create: function (array) {
@@ -40,8 +36,6 @@
       }
       return pinFragment;
     },
-
-    getClickedPin: getClickedPin,
 
   };
 })();
