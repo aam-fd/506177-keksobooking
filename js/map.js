@@ -44,7 +44,7 @@
   };
 
   var onPinClick = function (evt) {
-    var selectedAd = descriptions[evt.target.id];
+    var selectedAd = descriptions[evt.target.id]; //
     renderAd(selectedAd);
 
     onCloseCardClick(onCloseButtonClick);
@@ -57,9 +57,9 @@
     }
   };
 
-  var renderPins = function () {
+  var renderPins = function (data) {
     var pinsList = document.querySelector('.map__pins');
-    pinsList.appendChild(createPin(descriptions));
+    pinsList.appendChild(createPin(data)); //
   };
 
   var setDisabled = function () {
@@ -78,9 +78,18 @@
     mainPin.style.top = mainPin.offsetTop - mainPinSize.HEIGHT + mainPinSize.WIDTH / 2 + 'px';
   };
 
+  var getData = function (data) {
+    var descriptions = data;
+  
+    console.log(descriptions);
+  };
+
   var onMainPinFirstMouseUp = function () {
     setActive();
     shiftToPinTail();
+
+    window.load(getData);
+
     renderPins();
     renderSelectedAd();
 

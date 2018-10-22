@@ -6,13 +6,12 @@
                             .content
                             .querySelector('.map__pin');
 
-  var createPinLayout = function (object) {
+  var createPinLayout = function (object, id) {
 
     var x = object.location.x;
     var y = object.location.y;
     var avatar = object.author.avatar;
     var title = object.offer.title;
-    var id = object.id;
     var pinSize = window.constants.PinSize;
 
     var pin = pinTemplate.cloneNode(true);
@@ -32,7 +31,7 @@
     create: function (array) {
       var pinFragment = document.createDocumentFragment();
       for (var i = 0; i < array.length; i++) {
-        pinFragment.appendChild(createPinLayout(array[i]));
+        pinFragment.appendChild(createPinLayout(array[i], i));
       }
       return pinFragment;
     },
