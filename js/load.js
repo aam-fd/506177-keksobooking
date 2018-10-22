@@ -4,8 +4,8 @@
 
   var URL = 'https://js.dump.academy/keksobooking/data';
 
-  var onError = function (message) {
-    console.error(message);
+  var onError = function () {
+    // console.error(message);
   };
 
   window.load = function (onSuccess) {
@@ -15,7 +15,7 @@
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
         onSuccess(xhr.response);
-        console.log(xhr.response);
+        // console.log(xhr.response);
       } else {
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }

@@ -79,9 +79,7 @@
   };
 
   var getData = function (data) {
-    var descriptions = data;
-  
-    console.log(descriptions);
+    return data;
   };
 
   var onMainPinFirstMouseUp = function () {
