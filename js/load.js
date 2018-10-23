@@ -5,7 +5,14 @@
   var URL = 'https://js.dump.academy/keksobooking/data';
 
   var onError = function () {
-    // console.error(message);
+    var errorTemplate = document.querySelector('#error')
+                                .content
+                                .querySelector('.error');
+
+    var error = errorTemplate.cloneNode(true);
+    var main = document.querySelector('main');
+
+    main.appendChild(error);
   };
 
   window.load = function (onSuccess) {
@@ -15,15 +22,14 @@
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
         onSuccess(xhr.response);
-        // console.log(xhr.response);
       } else {
-        onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+        onError();
       }
 
     });
 
     xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения!');
+      onError();
     });
 
     xhr.open('GET', URL);

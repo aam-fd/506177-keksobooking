@@ -6,7 +6,7 @@
                             .content
                             .querySelector('.map__pin');
 
-  var createPinLayout = function (object, id) {
+  var createPinLayout = function (object, id, onPinClick) {
 
     var x = object.location.x;
     var y = object.location.y;
@@ -22,18 +22,16 @@
     pin.querySelector('img').alt = title;
     pin.querySelector('img').id = id;
     pin.id = id;
+    pin.addEventListener('click', onPinClick);
 
     return pin;
   };
 
   window.pin = {
 
-    create: function (array) {
+    create: function (description, id, onPinClick) {
       var pinFragment = document.createDocumentFragment();
-      for (var i = 0; i < array.length; i++) {
-        pinFragment.appendChild(createPinLayout(array[i], i));
-      }
-      return pinFragment;
+      return pinFragment.appendChild(createPinLayout(description, id, onPinClick));
     },
 
   };

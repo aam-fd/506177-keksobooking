@@ -18,48 +18,48 @@
   var fillAddress = window.form.fillAddress;
 
   var makeDraggable = window.makeDraggable;
-  var descriptions = window.data.adsDescriptions;
 
-  var createAd = window.card.create;
-  var onCloseCardClick = window.card.onCloseCardClick;
+  var createCard = window.card.create;
   var createPin = window.pin.create;
 
-  var deleteCard = function () {
-    var mapCard = document.querySelector('.map__card');
-    area.removeChild(mapCard);
+  var descriptions;
+
+  var closeButton = function (element) {
+    area.removeChild(element);
   };
 
-  var onCloseButtonClick = function () {
-    deleteCard();
+  var deleteCard = function () {
+    var card = document.querySelector('.map__card');
+    closeButton(card);
   };
 
   var renderAd = function (selectedAd) {
-    var mapCard = document.querySelector('.map__card');
-    var ad = createAd(selectedAd);
-    if (mapCard !== null) {
-      area.replaceChild(ad, mapCard);
+    var card = document.querySelector('.map__card');
+    var ad = createCard(selectedAd, deleteCard);
+
+    if (card !== null) {
+      area.replaceChild(ad, card);
     } else {
       area.appendChild(ad);
     }
   };
 
-  var onPinClick = function (evt) {
-    var selectedAd = descriptions[evt.target.id]; //
-    renderAd(selectedAd);
+  var renderPins = function (data) {
+    var pinsList = document.querySelector('.map__pins');
 
-    onCloseCardClick(onCloseButtonClick);
-  };
+    var onPinClick = function (evt) {
+      var selectedAd = data[evt.target.id];
+      renderAd(selectedAd);
+    };
 
-  var renderSelectedAd = function () {
-    var pinElements = document.querySelectorAll('.map__pin');
-    for (var i = 1; i < pinElements.length; i++) {
-      pinElements[i].addEventListener('click', onPinClick);
+    for (var i = 0; i < data.length; i++) {
+      pinsList.appendChild(createPin(data[i], i, onPinClick));
     }
   };
 
-  var renderPins = function (data) {
-    var pinsList = document.querySelector('.map__pins');
-    pinsList.appendChild(createPin(data)); //
+  var onSuccess = function (data) {
+    descriptions = data;
+    renderPins(descriptions);
   };
 
   var setDisabled = function () {
@@ -78,18 +78,11 @@
     mainPin.style.top = mainPin.offsetTop - mainPinSize.HEIGHT + mainPinSize.WIDTH / 2 + 'px';
   };
 
-  var getData = function (data) {
-    return data;
-  };
-
   var onMainPinFirstMouseUp = function () {
     setActive();
     shiftToPinTail();
 
-    window.load(getData);
-
-    renderPins();
-    renderSelectedAd();
+    window.load(onSuccess);
 
     mainPin.removeEventListener('mouseup', onMainPinFirstMouseUp);
   };
