@@ -22,8 +22,6 @@
   var createCard = window.card.create;
   var createPin = window.pin.create;
 
-  var descriptions;
-
   var closeButton = function (element) {
     area.removeChild(element);
   };
@@ -58,8 +56,7 @@
   };
 
   var onSuccess = function (data) {
-    descriptions = data;
-    renderPins(descriptions);
+    renderPins(data);
   };
 
   var setDisabled = function () {
