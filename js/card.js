@@ -12,7 +12,7 @@
   var cardTemplate = document.querySelector('#card')
                              .content;
 
-  var createCardLayout = function (object) {
+  var createCardLayout = function (object, callback) {
     var avatar = object.author.avatar;
     var title = object.offer.title;
     var address = object.offer.address;
@@ -48,22 +48,21 @@
       cardPhotos.insertAdjacentHTML('beforeend', '<img src="' + photos[j] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья"></img>');
     }
 
+    var closeButton = card.querySelector('.popup__close');
+    closeButton.addEventListener('click', callback);
+
     return card;
   };
 
   window.card = {
 
-    create: function (object) {
-      var cardLayout = createCardLayout(object);
+    create: function (object, callback) {
+      var cardLayout = createCardLayout(object, callback);
+
       var cardFragment = document.createDocumentFragment();
       cardFragment.appendChild(cardLayout);
 
       return cardFragment;
-    },
-
-    onCloseCardClick: function (callback) {
-      var closeButton = document.querySelector('.popup__close');
-      closeButton.addEventListener('click', callback);
     },
 
   };
