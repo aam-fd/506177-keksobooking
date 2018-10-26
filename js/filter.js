@@ -35,8 +35,8 @@ window.filter = (function () {
       }
     }
 
-    console.log(Filter);
-    console.log(name);
+    // console.log(Filter);
+    // console.log(name);
 
     var choosenAds = array.filter(function (object) {
       return object.offer.type === Filter.type;
@@ -46,7 +46,7 @@ window.filter = (function () {
       choosenAds = array;
     }
 
-    console.log(choosenAds);
+    // console.log(choosenAds);
     callback(choosenAds);
   };
 

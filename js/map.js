@@ -78,7 +78,7 @@
   };
 
   var onSuccess = function (data) {
-    console.log(data);
+    // console.log(data);
     renderPins(data);
     filter(filterForm, data, renderPins);
   };
