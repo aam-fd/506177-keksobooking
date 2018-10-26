@@ -25,6 +25,8 @@ window.constants = (function () {
 
     FORM_DISABLED: 'ad-form--disabled',
 
+    MAX_RENDERED_PINS: 5,
+
   };
 
 })();
