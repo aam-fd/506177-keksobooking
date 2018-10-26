@@ -3,8 +3,8 @@
 (function () {
 
   var TYPES_DESCRIPTION = {
-    palace: 'Квартира',
-    flat: 'Дворец',
+    palace: 'Дворец',
+    flat: 'Квартира',
     house: 'Дом',
     bungalo: 'Бунгало'
   };
