@@ -6,6 +6,11 @@
   var mainPin = area.querySelector('.map__pin--main');
   var formElements = document.querySelectorAll('fieldset');
 
+  var areaPins = document.querySelector('.map__pins');
+  var pins = document.createElement('div');
+  pins.setAttribute('class', 'pins');
+  areaPins.appendChild(pins);
+
   var areaSize = window.constants.Area;
   var mainPinSize = window.constants.MainPinSize;
   var fadedClass = window.constants.MAP_FADED;
@@ -22,7 +27,7 @@
   var createCard = window.card.create;
   var createPin = window.pin.create;
 
-  var descriptions;
+  var filter = window.filter;
 
   var closeButton = function (element) {
     area.removeChild(element);
@@ -45,7 +50,12 @@
   };
 
   var renderPins = function (data) {
-    var pinsList = document.querySelector('.map__pins');
+
+    var currPins = pins.querySelectorAll('.map__pin');
+
+    currPins.forEach(function (element) {
+      element.remove();
+    });
 
     var onPinClick = function (evt) {
       var selectedAd = data[evt.target.id];
@@ -53,13 +63,13 @@
     };
 
     for (var i = 0; i < data.length; i++) {
-      pinsList.appendChild(createPin(data[i], i, onPinClick));
+      pins.appendChild(createPin(data[i], i, onPinClick));
     }
   };
 
   var onSuccess = function (data) {
-    descriptions = data;
-    renderPins(descriptions);
+    renderPins(data);
+    filter(data, renderPins);
   };
 
   var setDisabled = function () {
