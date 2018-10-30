@@ -27,6 +27,20 @@ window.constants = (function () {
 
     MAX_RENDERED_PINS: 5,
 
+    Price: {
+      LOWER_LIMIT: 10000,
+      HIGHER_LIMIT: 50000,
+    },
+
+    ValueRange: {
+      LOW: 'low',
+      MIDDLE: 'middle',
+      HIGH: 'high',
+      ANY: 'any'
+    },
+
+    DEBOUNCE_INTERVAL: 2000,
+
   };
 
 })();
