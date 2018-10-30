@@ -11,8 +11,6 @@
   pins.setAttribute('class', 'pins');
   areaPins.appendChild(pins);
 
-  var filterForm = document.querySelector('.map__filters');
-
   var areaSize = window.constants.Area;
   var mainPinSize = window.constants.MainPinSize;
   var fadedClass = window.constants.MAP_FADED;
@@ -64,23 +62,15 @@
       renderAd(selectedAd);
     };
 
-    var maxRenderedPins;
-
-    if (data.length > 5) {
-      maxRenderedPins = window.constants.MAX_RENDERED_PINS;
-    } else {
-      maxRenderedPins = data.length;
-    }
-
-    for (var i = 0; i < maxRenderedPins; i++) {
+    for (var i = 0; i < data.length; i++) {
       pins.appendChild(createPin(data[i], i, onPinClick));
     }
   };
 
   var onSuccess = function (data) {
-    // console.log(data);
+    console.log(data);
     renderPins(data);
-    filter(filterForm, data, renderPins);
+    filter(data, renderPins);
   };
 
   var setDisabled = function () {
