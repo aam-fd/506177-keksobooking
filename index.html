@@ -84,7 +84,7 @@
     <!-- Форма объявления -->
     <section class="notice">
       <h2 class="notice__title">Ваше объявление</h2>
-      <form class="ad-form ad-form--disabled" method="post" enctype="multipart/form-data" autocomplete="off">
+      <form name="adForm" class="ad-form ad-form--disabled" method="post" enctype="multipart/form-data" autocomplete="off">
         <fieldset class="ad-form-header">
           <legend class="ad-form-header__title">Ваша фотография (для карты)</legend>
           <div class="ad-form-header__upload">
@@ -180,7 +180,7 @@
           </div>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--submit">
-          <button class="ad-form__submit" type="submit">Опубликовать</button>
+          <button class="ad-form__submit" type="button">Опубликовать</button>
           или <button class="ad-form__reset" type="reset">очистить</button>
         </fieldset>
       </form>

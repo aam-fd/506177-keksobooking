@@ -91,6 +91,18 @@
   timeOutInput.addEventListener('change', onTimeOutInputChange);
   roomNumberInput.addEventListener('change', onRoomNumberChange);
 
+  var onAdFormSubmit = function () {
+    var formData = document.querySelector('.ad-form');
+    var URL = 'https://js.dump.academy/keksobooking';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', URL);
+    xhr.send(formData);
+  };
+
+  var submitButton = document.querySelector('.ad-form__submit');
+  submitButton.addEventListener('click', onAdFormSubmit);
+
   window.form = {
     adForm: adForm,
     fillAddress: fillAddress,
