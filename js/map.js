@@ -11,6 +11,8 @@
   pins.setAttribute('class', 'pins');
   areaPins.appendChild(pins);
 
+  var filterForm = document.querySelector('.map__filters');
+
   var areaSize = window.constants.Area;
   var mainPinSize = window.constants.MainPinSize;
   var fadedClass = window.constants.MAP_FADED;
@@ -29,24 +31,35 @@
 
   var filter = window.filter;
 
-  var closeButton = function (element) {
-    area.removeChild(element);
+  var closeCard = function () {
+    var card = document.querySelector('.map__card');
+    area.removeChild(card);
   };
 
-  var deleteCard = function () {
-    var card = document.querySelector('.map__card');
-    closeButton(card);
+  var onEscPressToCloseCardAd = function (evt) {
+    if (evt.keyCode === 27) {
+      closeCard();
+    }
+    document.removeEventListener('keydown', onEscPressToCloseCardAd);
   };
 
-  var renderAd = function (selectedAd) {
+  var onFilterFormToCloseCardAd = function () {
+    closeCard();
+    filterForm.removeEventListener('change', onFilterFormToCloseCardAd);
+  };
+
+  var renderCardAd = function (selectedAd) {
     var card = document.querySelector('.map__card');
-    var ad = createCard(selectedAd, deleteCard);
+    var ad = createCard(selectedAd, closeCard);
 
     if (card !== null) {
       area.replaceChild(ad, card);
     } else {
       area.appendChild(ad);
     }
+
+    document.addEventListener('keydown', onEscPressToCloseCardAd);
+    filterForm.addEventListener('change', onFilterFormToCloseCardAd);
   };
 
   var renderPins = function (data) {
@@ -59,7 +72,7 @@
 
     var onPinClick = function (evt) {
       var selectedAd = data[evt.target.id];
-      renderAd(selectedAd);
+      renderCardAd(selectedAd);
     };
 
     for (var i = 0; i < data.length; i++) {
