@@ -68,7 +68,6 @@
   };
 
   var onSuccess = function (data) {
-    console.log(data);
     renderPins(data);
     filter(data, renderPins);
   };
