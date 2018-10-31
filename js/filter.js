@@ -56,8 +56,7 @@ window.filter = (function () {
     if (roomsFilterValue === anyValue) {
       return true;
     } else {
-      roomsFilterValue = +roomsFilterValue;
-      return adRooms === roomsFilterValue;
+      return adRooms === +roomsFilterValue;
     }
   };
 
@@ -70,8 +69,7 @@ window.filter = (function () {
     if (guestsFilterValue === anyValue) {
       return true;
     } else {
-      guestsFilterValue = +guestsFilterValue;
-      return adGuests === guestsFilterValue;
+      return adGuests === +guestsFilterValue;
     }
   };
 
