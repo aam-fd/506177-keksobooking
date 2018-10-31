@@ -34,8 +34,16 @@ window.util = (function () {
       }
     },
 
+    fillInputValue: function (input, value) {
+      input.value = value;
+    },
+
     removeClass: function (element, elementClass) {
       element.classList.remove(elementClass);
+    },
+
+    addClass: function (element, elementClass) {
+      element.classList.add(elementClass);
     },
   };
 

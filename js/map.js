@@ -12,6 +12,8 @@
   areaPins.appendChild(pins);
 
   var filterForm = document.querySelector('.map__filters');
+  var adForm = document.querySelector('.ad-form');
+  var addressInput = adForm.querySelector('#address');
 
   var areaSize = window.constants.Area;
   var mainPinSize = window.constants.MainPinSize;
@@ -20,9 +22,8 @@
 
   var switchDisabled = window.util.switchDisabled;
   var removeClass = window.util.removeClass;
-
-  var adForm = window.form.adForm;
-  var fillAddress = window.form.fillAddress;
+  var addClass = window.util.addClass;
+  var fillInputValue = window.util.fillInputValue;
 
   var makeDraggable = window.makeDraggable;
 
@@ -62,13 +63,16 @@
     filterForm.addEventListener('change', onFilterFormToCloseCardAd);
   };
 
-  var renderPins = function (data) {
-
+  var deletePins = function () {
     var currPins = pins.querySelectorAll('.map__pin');
-
     currPins.forEach(function (element) {
       element.remove();
     });
+  };
+
+  var renderPins = function (data) {
+
+    deletePins();
 
     var onPinClick = function (evt) {
       var selectedAd = data[evt.target.id];
@@ -85,10 +89,13 @@
     filter(data, renderPins);
   };
 
-  var setDisabled = function () {
+  var setInactiveState = function () {
     switchDisabled(formElements, true);
+    addClass(area, fadedClass);
+    addClass(adForm, disabledClass);
   };
-  setDisabled();
+
+  setInactiveState();
 
   var setActive = function () {
     switchDisabled(formElements, false);
@@ -124,12 +131,11 @@
   };
 
   var fillAddressByCalculatedCoords = function (element, elementSize) {
-    fillAddress(calculateCoords(element, elementSize));
+    fillInputValue(addressInput, calculateCoords(element, elementSize));
   };
 
   mainPin.addEventListener('mouseup', onMainPinFirstMouseUp);
   fillAddressByCalculatedCoords(mainPin, mainPinSize);
-
   makeDraggable(mainPin, mainPinSize, area, areaSize, fillAddressByCalculatedCoords);
 
   window.map = {
@@ -138,6 +144,9 @@
     mainPinSize: mainPinSize,
     calculateCoords: calculateCoords,
     fillAddressByCalculatedCoords: fillAddressByCalculatedCoords,
+    setInactiveState: setInactiveState,
+    closeCard: closeCard,
+    deletePins: deletePins,
   };
 
 })();
