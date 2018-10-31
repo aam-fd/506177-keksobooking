@@ -11,6 +11,10 @@
   pins.setAttribute('class', 'pins');
   areaPins.appendChild(pins);
 
+  var filterForm = document.querySelector('.map__filters');
+  var adForm = document.querySelector('.ad-form');
+  var addressInput = adForm.querySelector('#address');
+
   var areaSize = window.constants.Area;
   var mainPinSize = window.constants.MainPinSize;
   var fadedClass = window.constants.MAP_FADED;
@@ -18,9 +22,8 @@
 
   var switchDisabled = window.util.switchDisabled;
   var removeClass = window.util.removeClass;
-
-  var adForm = window.form.adForm;
-  var fillAddress = window.form.fillAddress;
+  var addClass = window.util.addClass;
+  var fillInputValue = window.util.fillInputValue;
 
   var makeDraggable = window.makeDraggable;
 
@@ -29,37 +32,51 @@
 
   var filter = window.filter;
 
-  var closeButton = function (element) {
-    area.removeChild(element);
+  var closeCard = function () {
+    var card = document.querySelector('.map__card');
+    area.removeChild(card);
   };
 
-  var deleteCard = function () {
-    var card = document.querySelector('.map__card');
-    closeButton(card);
+  var onEscPressToCloseCardAd = function (evt) {
+    if (evt.keyCode === 27) {
+      closeCard();
+    }
+    document.removeEventListener('keydown', onEscPressToCloseCardAd);
   };
 
-  var renderAd = function (selectedAd) {
+  var onFilterFormToCloseCardAd = function () {
+    closeCard();
+    filterForm.removeEventListener('change', onFilterFormToCloseCardAd);
+  };
+
+  var renderCardAd = function (selectedAd) {
     var card = document.querySelector('.map__card');
-    var ad = createCard(selectedAd, deleteCard);
+    var ad = createCard(selectedAd, closeCard);
 
     if (card !== null) {
       area.replaceChild(ad, card);
     } else {
       area.appendChild(ad);
     }
+
+    document.addEventListener('keydown', onEscPressToCloseCardAd);
+    filterForm.addEventListener('change', onFilterFormToCloseCardAd);
+  };
+
+  var deletePins = function () {
+    var currPins = pins.querySelectorAll('.map__pin');
+    currPins.forEach(function (element) {
+      element.remove();
+    });
   };
 
   var renderPins = function (data) {
 
-    var currPins = pins.querySelectorAll('.map__pin');
-
-    currPins.forEach(function (element) {
-      element.remove();
-    });
+    deletePins();
 
     var onPinClick = function (evt) {
       var selectedAd = data[evt.target.id];
-      renderAd(selectedAd);
+      renderCardAd(selectedAd);
     };
 
     for (var i = 0; i < data.length; i++) {
@@ -72,10 +89,13 @@
     filter(data, renderPins);
   };
 
-  var setDisabled = function () {
+  var setInactiveState = function () {
     switchDisabled(formElements, true);
+    addClass(area, fadedClass);
+    addClass(adForm, disabledClass);
   };
-  setDisabled();
+
+  setInactiveState();
 
   var setActive = function () {
     switchDisabled(formElements, false);
@@ -111,12 +131,11 @@
   };
 
   var fillAddressByCalculatedCoords = function (element, elementSize) {
-    fillAddress(calculateCoords(element, elementSize));
+    fillInputValue(addressInput, calculateCoords(element, elementSize));
   };
 
   mainPin.addEventListener('mouseup', onMainPinFirstMouseUp);
   fillAddressByCalculatedCoords(mainPin, mainPinSize);
-
   makeDraggable(mainPin, mainPinSize, area, areaSize, fillAddressByCalculatedCoords);
 
   window.map = {
@@ -125,6 +144,9 @@
     mainPinSize: mainPinSize,
     calculateCoords: calculateCoords,
     fillAddressByCalculatedCoords: fillAddressByCalculatedCoords,
+    setInactiveState: setInactiveState,
+    closeCard: closeCard,
+    deletePins: deletePins,
   };
 
 })();

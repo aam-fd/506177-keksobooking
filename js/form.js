@@ -12,11 +12,6 @@
   // adForm.action = 'https://js.dump.academy/keksobooking';
 
   var adForm = document.querySelector('.ad-form');
-  var addressInput = adForm.querySelector('#address');
-
-  var fillAddress = function (value) {
-    addressInput.value = value;
-  };
 
   var selectInvalidFieldForm = function (field) {
     field.classList.add('ad-form__error');
@@ -91,9 +86,99 @@
   timeOutInput.addEventListener('change', onTimeOutInputChange);
   roomNumberInput.addEventListener('change', onRoomNumberChange);
 
-  window.form = {
-    adForm: adForm,
-    fillAddress: fillAddress,
+  var setInactiveState = window.map.setInactiveState;
+  var closeCard = window.map.closeCard;
+  var deletePins = window.map.deletePins;
+
+  var onSuccess = function () {
+
+    var successTemplate = document.querySelector('#success')
+                                .content
+                                .querySelector('.success');
+
+    var success = successTemplate.cloneNode(true);
+    var main = document.querySelector('main');
+
+    main.appendChild(success);
+
+    var removeEventListener = function () {
+      document.removeEventListener('keydown', onEscPress);
+      document.removeEventListener('click', onClick);
+    };
+
+    var onEscPress = function (evt) {
+      if (evt.keyCode === 27) {
+        main.removeChild(success);
+        setInactiveState();
+        closeCard();
+        deletePins();
+      }
+      removeEventListener();
+    };
+
+    var onClick = function () {
+      main.removeChild(success);
+      setInactiveState();
+      closeCard();
+      deletePins();
+      removeEventListener();
+    };
+
+
+    document.addEventListener('click', onClick);
+    document.addEventListener('keydown', onEscPress);
   };
+
+  var onError = function () {
+
+    var errorTemplate = document.querySelector('#error')
+                                .content
+                                .querySelector('.error');
+
+    var error = errorTemplate.cloneNode(true);
+    var errorButton = error.querySelector('.error__button');
+    var main = document.querySelector('main');
+
+    main.appendChild(error);
+
+    var removeEventListener = function () {
+      document.removeEventListener('keydown', onEscPress);
+      document.removeEventListener('click', onClick);
+    };
+
+    var onEscPress = function (evt) {
+      if (evt.keyCode === 27) {
+        main.removeChild(error);
+      }
+      removeEventListener();
+    };
+
+    var onClick = function () {
+      main.removeChild(error);
+      removeEventListener();
+    };
+
+    errorButton.addEventListener('click', onClick);
+    document.addEventListener('click', onClick);
+    document.addEventListener('keydown', onEscPress);
+  };
+
+  var onAdFormSubmit = function () {
+    var URL = 'https://js.dump.academy/keksobooking';
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.addEventListener('load', function () {
+      if (xhr.status === 200) {
+        onSuccess(setInactiveState, closeCard, deletePins);
+      } else {
+        onError();
+      }
+    });
+    xhr.open('POST', URL);
+    xhr.send(new FormData(adForm));
+  };
+
+  adForm.addEventListener('submit', onAdFormSubmit);
 
 })();

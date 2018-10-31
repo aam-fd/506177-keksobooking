@@ -39,7 +39,7 @@ window.constants = (function () {
       ANY: 'any'
     },
 
-    DEBOUNCE_INTERVAL: 2000,
+    DEBOUNCE_INTERVAL: 500,
 
   };
 
