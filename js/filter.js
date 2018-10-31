@@ -82,19 +82,12 @@ window.filter = (function () {
 
     for (var i = 0; i < featuresCollection.length; i++) {
       if (featuresCollection[i].checked) {
-        featuresSelected.push(featuresCollection[i].value);
+        featuresSelected.push(adFeatures.includes(featuresCollection[i].value));
       }
     }
 
-    if (featuresSelected.length > 0) {
-
-      var featuresIsContained = [];
-
-      featuresSelected.forEach(function (element) {
-        featuresIsContained.push(adFeatures.includes(element));
-      });
-
-      return !featuresIsContained.includes(false);
+    if (featuresSelected.includes(false)) {
+      return false;
     } else {
       return true;
     }
@@ -103,11 +96,11 @@ window.filter = (function () {
 
   var getFilteredData = function () {
     var filteredData = array.filter(typeFilter)
-                          .filter(priceFilter)
-                          .filter(roomsFilter)
-                          .filter(guestsFilter)
-                          .filter(featuresFilter)
-                          .slice(0, maxRenderedPins);
+                            .filter(priceFilter)
+                            .filter(roomsFilter)
+                            .filter(guestsFilter)
+                            .filter(featuresFilter)
+                            .slice(0, maxRenderedPins);
 
     callback(filteredData);
   };
