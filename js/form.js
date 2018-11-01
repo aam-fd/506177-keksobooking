@@ -87,6 +87,19 @@
   var setInactiveState = window.map.setInactiveState;
   var closeCard = window.map.closeCard;
   var deletePins = window.map.deletePins;
+  var setMainPinEventListener = window.map.setMainPinEventListener;
+
+  var resetForm = function () {
+    adForm.reset();
+  };
+
+  var setInactivePage = function () {
+    setInactiveState();
+    closeCard();
+    deletePins();
+    resetForm();
+    setMainPinEventListener();
+  };
 
   var onSuccess = function () {
 
@@ -107,18 +120,14 @@
     var onEscPress = function (evt) {
       if (evt.keyCode === 27) {
         main.removeChild(success);
-        setInactiveState();
-        closeCard();
-        deletePins();
+        setInactivePage();
       }
       removeEventListener();
     };
 
     var onClick = function () {
       main.removeChild(success);
-      setInactiveState();
-      closeCard();
-      deletePins();
+      setInactivePage();
       removeEventListener();
     };
 
@@ -140,6 +149,7 @@
     main.appendChild(error);
 
     var removeEventListener = function () {
+      errorButton.removeEventListener('click', onClick);
       document.removeEventListener('keydown', onEscPress);
       document.removeEventListener('click', onClick);
     };
@@ -161,14 +171,15 @@
     document.addEventListener('keydown', onEscPress);
   };
 
-  var onAdFormSubmit = function () {
-    var URL = 'https://js.dump.academy/keksobooking';
+  var onAdFormSubmit = function (evt) {
+    evt.preventDefault();
 
+    var URL = 'https://js.dump.academy/keksobooking';
     var xhr = new XMLHttpRequest();
 
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
-        onSuccess(setInactiveState, closeCard, deletePins);
+        onSuccess();
       } else {
         onError();
       }
@@ -178,5 +189,11 @@
   };
 
   adForm.addEventListener('submit', onAdFormSubmit);
+
+  var onAdFormReset = function () {
+    setInactivePage();
+  };
+
+  adForm.addEventListener('reset', onAdFormReset);
 
 })();
