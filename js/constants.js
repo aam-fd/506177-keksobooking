@@ -21,6 +21,11 @@ window.constants = (function () {
       HEIGHT: 87
     },
 
+    MainPinCoordinate: {
+      Y: '320.5',
+      X: '570',
+    },
+
     MAP_FADED: 'map--faded',
 
     FORM_DISABLED: 'ad-form--disabled',

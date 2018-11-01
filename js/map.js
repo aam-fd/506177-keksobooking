@@ -17,6 +17,7 @@
 
   var areaSize = window.constants.Area;
   var mainPinSize = window.constants.MainPinSize;
+  var MainPinCoordinate = window.constants.MainPinCoordinate;
   var fadedClass = window.constants.MAP_FADED;
   var disabledClass = window.constants.FORM_DISABLED;
 
@@ -34,7 +35,9 @@
 
   var closeCard = function () {
     var card = document.querySelector('.map__card');
-    area.removeChild(card);
+    if (card !== null) {
+      area.removeChild(card);
+    }
   };
 
   var onEscPressToCloseCardAd = function (evt) {
@@ -97,23 +100,21 @@
 
   setInactiveState();
 
-  var setActive = function () {
+  var setActiveState = function () {
     switchDisabled(formElements, false);
-
     removeClass(area, fadedClass);
     removeClass(adForm, disabledClass);
   };
 
   var shiftToPinTail = function () {
-    mainPin.style.top = mainPin.offsetTop - mainPinSize.HEIGHT + mainPinSize.WIDTH / 2 + 'px';
+    mainPin.style = 'left: ' + MainPinCoordinate.X + 'px; top: ' + MainPinCoordinate.Y + 'px;';
   };
 
   var onMainPinFirstMouseUp = function () {
-    setActive();
+    setActiveState();
     shiftToPinTail();
 
     window.load(onSuccess);
-
     mainPin.removeEventListener('mouseup', onMainPinFirstMouseUp);
   };
 
@@ -134,7 +135,11 @@
     fillInputValue(addressInput, calculateCoords(element, elementSize));
   };
 
-  mainPin.addEventListener('mouseup', onMainPinFirstMouseUp);
+  var setMainPinEventListener = function () {
+    mainPin.addEventListener('mouseup', onMainPinFirstMouseUp);
+  };
+  setMainPinEventListener();
+
   fillAddressByCalculatedCoords(mainPin, mainPinSize);
   makeDraggable(mainPin, mainPinSize, area, areaSize, fillAddressByCalculatedCoords);
 
@@ -147,6 +152,7 @@
     setInactiveState: setInactiveState,
     closeCard: closeCard,
     deletePins: deletePins,
+    setMainPinEventListener: setMainPinEventListener,
   };
 
 })();
