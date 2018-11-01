@@ -92,14 +92,6 @@
     filter(data, renderPins);
   };
 
-  var setInactiveState = function () {
-    switchDisabled(formElements, true);
-    addClass(area, fadedClass);
-    addClass(adForm, disabledClass);
-  };
-
-  setInactiveState();
-
   var setActiveState = function () {
     switchDisabled(formElements, false);
     removeClass(area, fadedClass);
@@ -138,9 +130,17 @@
   var setMainPinEventListener = function () {
     mainPin.addEventListener('mouseup', onMainPinFirstMouseUp);
   };
+
   setMainPinEventListener();
 
-  fillAddressByCalculatedCoords(mainPin, mainPinSize);
+  var setInactiveState = function () {
+    switchDisabled(formElements, true);
+    addClass(area, fadedClass);
+    addClass(adForm, disabledClass);
+    fillAddressByCalculatedCoords(mainPin, mainPinSize);
+  };
+
+  setInactiveState();
   makeDraggable(mainPin, mainPinSize, area, areaSize, fillAddressByCalculatedCoords);
 
   window.map = {
