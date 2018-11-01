@@ -2,18 +2,11 @@
 
 window.filter = (function () {
 
-  var maxRenderedPins = window.constants.MAX_RENDERED_PINS;
-  var lowPrice = window.constants.Price.LOWER_LIMIT;
-  var highPrice = window.constants.Price.HIGHER_LIMIT;
-  var lowValue = window.constants.ValueRange.LOW;
-  var middleValue = window.constants.ValueRange.MIDDLE;
-  var highValue = window.constants.ValueRange.HIGH;
-  var anyValue = window.constants.ValueRange.ANY;
-  var debounceInterval = window.constants.DEBOUNCE_INTERVAL;
+  var price = window.constants.Price;
+  var valueRange = window.constants.ValueRange;
 
   var array = [];
   var callback;
-
 
   var filterForm = document.querySelector('.map__filters');
 
@@ -23,7 +16,7 @@ window.filter = (function () {
     var typeFilterValue = filterForm.querySelector('#housing-type')
                                     .value;
 
-    if (typeFilterValue === anyValue) {
+    if (typeFilterValue === valueRange.ANY) {
       return true;
     } else {
       return adType === typeFilterValue;
@@ -36,12 +29,12 @@ window.filter = (function () {
     var priceFilterValue = filterForm.querySelector('#housing-price')
                                       .value;
 
-    if (priceFilterValue === lowValue) {
-      return adPrice < lowPrice;
-    } else if (priceFilterValue === middleValue) {
-      return adPrice > lowPrice && adPrice < highPrice;
-    } else if (priceFilterValue === highValue) {
-      return adPrice > highPrice;
+    if (priceFilterValue === valueRange.LOW) {
+      return adPrice < price.LOWER_LIMIT;
+    } else if (priceFilterValue === valueRange.MIDDLE) {
+      return adPrice > price.LOWER_LIMIT && adPrice < price.HIGHER_LIMIT;
+    } else if (priceFilterValue === valueRange.HIGH) {
+      return adPrice > price.HIGHER_LIMIT;
     } else {
       return true;
     }
@@ -53,7 +46,7 @@ window.filter = (function () {
     var roomsFilterValue = filterForm.querySelector('#housing-rooms')
                                       .value;
 
-    if (roomsFilterValue === anyValue) {
+    if (roomsFilterValue === valueRange.ANY) {
       return true;
     } else {
       return adRooms === +roomsFilterValue;
@@ -66,7 +59,7 @@ window.filter = (function () {
     var guestsFilterValue = filterForm.querySelector('#housing-guests')
                                         .value;
 
-    if (guestsFilterValue === anyValue) {
+    if (guestsFilterValue === valueRange.ANY) {
       return true;
     } else {
       return adGuests === +guestsFilterValue;
@@ -100,12 +93,12 @@ window.filter = (function () {
                             .filter(roomsFilter)
                             .filter(guestsFilter)
                             .filter(featuresFilter)
-                            .slice(0, maxRenderedPins);
+                            .slice(0, window.constants.MAX_RENDERED_PINS);
 
     callback(filteredData);
   };
 
-  var onFilterFormChange = window.debounce(getFilteredData, debounceInterval);
+  var onFilterFormChange = window.debounce(getFilteredData, window.constants.DEBOUNCE_INTERVAL);
 
   return function (arr, cb) {
 

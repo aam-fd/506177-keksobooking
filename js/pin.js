@@ -18,9 +18,11 @@
 
     pin.style.left = x - pinSize.WIDTH / 2 + 'px';
     pin.style.top = y - pinSize.HEIGHT + 'px';
-    pin.querySelector('img').src = avatar;
-    pin.querySelector('img').alt = title;
-    pin.querySelector('img').id = id;
+
+    var img = pin.querySelector('img');
+    img.src = avatar;
+    img.alt = title;
+    img.id = id;
     pin.id = id;
     pin.addEventListener('click', onPinClick);
 

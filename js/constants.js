@@ -4,6 +4,13 @@ window.constants = (function () {
 
   return {
 
+    TypesDescription: {
+      PALACE: 'Дворец',
+      FLAT: 'Квартира',
+      HOUSE: 'Дом',
+      BUNGALO: 'Бунгало'
+    },
+
     Area: {
       MIN_X: 0,
       MAX_X: 1200,
@@ -45,6 +52,12 @@ window.constants = (function () {
     },
 
     DEBOUNCE_INTERVAL: 500,
+
+    URL: 'https://js.dump.academy/keksobooking',
+
+    SUCCESS_CODE_STATUS: 200,
+
+    ESC_KEYCODE: 27,
 
   };
 

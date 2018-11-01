@@ -85,17 +85,21 @@
     for (var i = 0; i < data.length; i++) {
       pins.appendChild(createPin(data[i], i, onPinClick));
     }
+
+    switchDisabled(filterForm, false);
   };
 
   var onSuccess = function (data) {
     renderPins(data);
     filter(data, renderPins);
+    
   };
 
   var setActiveState = function () {
     switchDisabled(formElements, false);
     removeClass(area, fadedClass);
     removeClass(adForm, disabledClass);
+    switchDisabled(filterForm, true);
   };
 
   var shiftToPinTail = function () {
@@ -137,6 +141,7 @@
     switchDisabled(formElements, true);
     addClass(area, fadedClass);
     addClass(adForm, disabledClass);
+    
     fillAddressByCalculatedCoords(mainPin, mainPinSize);
   };
 

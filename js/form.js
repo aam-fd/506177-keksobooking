@@ -118,7 +118,7 @@
     };
 
     var onEscPress = function (evt) {
-      if (evt.keyCode === 27) {
+      if (evt.keyCode === window.constants.ESC_KEYCODE) {
         main.removeChild(success);
         setInactivePage();
       }
@@ -174,17 +174,16 @@
   var onAdFormSubmit = function (evt) {
     evt.preventDefault();
 
-    var URL = 'https://js.dump.academy/keksobooking';
     var xhr = new XMLHttpRequest();
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === window.constants.SUCCESS_CODE_STATUS) {
         onSuccess();
       } else {
         onError();
       }
     });
-    xhr.open('POST', URL);
+    xhr.open('POST', window.constants.URL);
     xhr.send(new FormData(adForm));
   };
 
