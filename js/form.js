@@ -9,8 +9,6 @@
     bungalo: 0
   };
 
-  // adForm.action = 'https://js.dump.academy/keksobooking';
-
   var adForm = document.querySelector('.ad-form');
 
   var selectInvalidFieldForm = function (field) {
