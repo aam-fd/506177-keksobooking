@@ -92,7 +92,7 @@
   var onSuccess = function (data) {
     renderPins(data);
     filter(data, renderPins);
-    
+
   };
 
   var setActiveState = function () {
@@ -141,7 +141,7 @@
     switchDisabled(formElements, true);
     addClass(area, fadedClass);
     addClass(adForm, disabledClass);
-    
+
     fillAddressByCalculatedCoords(mainPin, mainPinSize);
   };
 
