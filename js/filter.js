@@ -80,11 +80,11 @@ window.filter = (function () {
                                         .elements;
     var featuresSelected = [];
 
-    for (var i = 0; i < featuresCollection.length; i++) {
-      if (featuresCollection[i].checked) {
-        featuresSelected.push(adFeatures.includes(featuresCollection[i].value));
+    [].forEach.call(featuresCollection, function (element) {
+      if (element.checked) {
+        featuresSelected.push(adFeatures.includes(element.value));
       }
-    }
+    });
 
     if (featuresSelected.includes(false)) {
       return false;
