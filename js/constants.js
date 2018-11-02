@@ -4,6 +4,20 @@ window.constants = (function () {
 
   return {
 
+    TypesDescription: {
+      PALACE: 'Дворец',
+      FLAT: 'Квартира',
+      HOUSE: 'Дом',
+      BUNGALO: 'Бунгало'
+    },
+
+    TypesPrice: {
+      PALACE: 10000,
+      FLAT: 1000,
+      HOUSE: 5000,
+      BUNGALO: 0
+    },
+
     Area: {
       MIN_X: 0,
       MAX_X: 1200,
@@ -19,6 +33,11 @@ window.constants = (function () {
     MainPinSize: {
       WIDTH: 65,
       HEIGHT: 87
+    },
+
+    MainPinCoordinate: {
+      X: '570',
+      Y: '375',
     },
 
     MAP_FADED: 'map--faded',
@@ -40,6 +59,17 @@ window.constants = (function () {
     },
 
     DEBOUNCE_INTERVAL: 500,
+
+    URL_FOR_POST: 'https://js.dump.academy/keksobooking',
+    URL_FOR_GET: 'https://js.dump.academy/keksobooking/data',
+
+    CodeStatus: {
+      OK: 200,
+      NOT_FOUND: 404,
+      SERVER_ERROR: 500,
+    },
+
+    ESC_KEYCODE: 27,
 
   };
 

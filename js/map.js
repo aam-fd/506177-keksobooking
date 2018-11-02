@@ -15,11 +15,6 @@
   var adForm = document.querySelector('.ad-form');
   var addressInput = adForm.querySelector('#address');
 
-  var areaSize = window.constants.Area;
-  var mainPinSize = window.constants.MainPinSize;
-  var fadedClass = window.constants.MAP_FADED;
-  var disabledClass = window.constants.FORM_DISABLED;
-
   var switchDisabled = window.util.switchDisabled;
   var removeClass = window.util.removeClass;
   var addClass = window.util.addClass;
@@ -34,11 +29,13 @@
 
   var closeCard = function () {
     var card = document.querySelector('.map__card');
-    area.removeChild(card);
+    if (card !== null) {
+      area.removeChild(card);
+    }
   };
 
   var onEscPressToCloseCardAd = function (evt) {
-    if (evt.keyCode === 27) {
+    if (evt.keyCode === window.constants.ESC_KEYCODE) {
       closeCard();
     }
     document.removeEventListener('keydown', onEscPressToCloseCardAd);
@@ -82,38 +79,40 @@
     for (var i = 0; i < data.length; i++) {
       pins.appendChild(createPin(data[i], i, onPinClick));
     }
+
+    switchDisabled(filterForm, false);
   };
 
   var onSuccess = function (data) {
     renderPins(data);
     filter(data, renderPins);
+
   };
 
-  var setInactiveState = function () {
-    switchDisabled(formElements, true);
-    addClass(area, fadedClass);
-    addClass(adForm, disabledClass);
-  };
-
-  setInactiveState();
-
-  var setActive = function () {
+  var setActiveState = function () {
     switchDisabled(formElements, false);
-
-    removeClass(area, fadedClass);
-    removeClass(adForm, disabledClass);
+    removeClass(area, window.constants.MAP_FADED);
+    removeClass(adForm, window.constants.FORM_DISABLED);
+    switchDisabled(filterForm, true);
   };
 
-  var shiftToPinTail = function () {
-    mainPin.style.top = mainPin.offsetTop - mainPinSize.HEIGHT + mainPinSize.WIDTH / 2 + 'px';
+  var getMainPinCoords = function () {
+    mainPin.style = 'left: ' + window.constants.MainPinCoordinate.X + 'px; top: '
+                             + window.constants.MainPinCoordinate.Y + 'px;';
+  };
+
+  var shiftMainPinCoordsToTail = function () {
+    mainPin.style = 'left: ' + window.constants.MainPinCoordinate.X + 'px; top: '
+                             + (window.constants.MainPinCoordinate.Y
+                             - window.constants.MainPinSize.HEIGHT
+                             + window.constants.MainPinSize.WIDTH / 2) + 'px;';
   };
 
   var onMainPinFirstMouseUp = function () {
-    setActive();
-    shiftToPinTail();
+    setActiveState();
+    shiftMainPinCoordsToTail();
 
     window.load(onSuccess);
-
     mainPin.removeEventListener('mouseup', onMainPinFirstMouseUp);
   };
 
@@ -121,7 +120,7 @@
     var pinX = element.offsetLeft + elementSize.WIDTH / 2;
 
     var pinY;
-    if (area.classList.contains(fadedClass)) {
+    if (area.classList.contains(window.constants.MAP_FADED)) {
       pinY = element.offsetTop + elementSize.WIDTH / 2;
     } else {
       pinY = element.offsetTop + elementSize.HEIGHT;
@@ -134,19 +133,29 @@
     fillInputValue(addressInput, calculateCoords(element, elementSize));
   };
 
-  mainPin.addEventListener('mouseup', onMainPinFirstMouseUp);
-  fillAddressByCalculatedCoords(mainPin, mainPinSize);
-  makeDraggable(mainPin, mainPinSize, area, areaSize, fillAddressByCalculatedCoords);
+  var setMainPinEventListener = function () {
+    mainPin.addEventListener('mouseup', onMainPinFirstMouseUp);
+  };
+
+  setMainPinEventListener();
+
+  var setInactiveState = function () {
+    switchDisabled(formElements, true);
+    addClass(area, window.constants.MAP_FADED);
+    addClass(adForm, window.constants.FORM_DISABLED);
+    getMainPinCoords();
+    fillAddressByCalculatedCoords(mainPin, window.constants.MainPinSize);
+  };
+
+  setInactiveState();
+  makeDraggable(mainPin, window.constants.MainPinSize,
+      area, window.constants.Area, fillAddressByCalculatedCoords);
 
   window.map = {
-    area: area,
-    mainPin: mainPin,
-    mainPinSize: mainPinSize,
-    calculateCoords: calculateCoords,
-    fillAddressByCalculatedCoords: fillAddressByCalculatedCoords,
     setInactiveState: setInactiveState,
     closeCard: closeCard,
     deletePins: deletePins,
+    setMainPinEventListener: setMainPinEventListener,
   };
 
 })();
