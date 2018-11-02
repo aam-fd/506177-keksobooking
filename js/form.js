@@ -170,7 +170,7 @@
     var xhr = new XMLHttpRequest();
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === window.constants.SUCCESS_CODE_STATUS) {
+      if (xhr.status === window.constants.CodeStatus.OK) {
         onSuccess();
       } else {
         onError();
