@@ -15,12 +15,6 @@
   var adForm = document.querySelector('.ad-form');
   var addressInput = adForm.querySelector('#address');
 
-  var areaSize = window.constants.Area;
-  var mainPinSize = window.constants.MainPinSize;
-  var MainPinCoordinate = window.constants.MainPinCoordinate;
-  var fadedClass = window.constants.MAP_FADED;
-  var disabledClass = window.constants.FORM_DISABLED;
-
   var switchDisabled = window.util.switchDisabled;
   var removeClass = window.util.removeClass;
   var addClass = window.util.addClass;
@@ -41,7 +35,7 @@
   };
 
   var onEscPressToCloseCardAd = function (evt) {
-    if (evt.keyCode === 27) {
+    if (evt.keyCode === window.constants.ESC_KEYCODE) {
       closeCard();
     }
     document.removeEventListener('keydown', onEscPressToCloseCardAd);
@@ -97,18 +91,26 @@
 
   var setActiveState = function () {
     switchDisabled(formElements, false);
-    removeClass(area, fadedClass);
-    removeClass(adForm, disabledClass);
+    removeClass(area, window.constants.MAP_FADED);
+    removeClass(adForm, window.constants.FORM_DISABLED);
     switchDisabled(filterForm, true);
   };
 
-  var shiftToPinTail = function () {
-    mainPin.style = 'left: ' + MainPinCoordinate.X + 'px; top: ' + MainPinCoordinate.Y + 'px;';
+  var getMainPinCoords = function () {
+    mainPin.style = 'left: ' + window.constants.MainPinCoordinate.X + 'px; top: '
+                             + window.constants.MainPinCoordinate.Y + 'px;';
+  };
+
+  var shiftMainPinCoordsToTail = function () {
+    mainPin.style = 'left: ' + window.constants.MainPinCoordinate.X + 'px; top: '
+                             + (window.constants.MainPinCoordinate.Y
+                             - window.constants.MainPinSize.HEIGHT
+                             + window.constants.MainPinSize.WIDTH / 2) + 'px;';
   };
 
   var onMainPinFirstMouseUp = function () {
     setActiveState();
-    shiftToPinTail();
+    shiftMainPinCoordsToTail();
 
     window.load(onSuccess);
     mainPin.removeEventListener('mouseup', onMainPinFirstMouseUp);
@@ -118,7 +120,7 @@
     var pinX = element.offsetLeft + elementSize.WIDTH / 2;
 
     var pinY;
-    if (area.classList.contains(fadedClass)) {
+    if (area.classList.contains(window.constants.MAP_FADED)) {
       pinY = element.offsetTop + elementSize.WIDTH / 2;
     } else {
       pinY = element.offsetTop + elementSize.HEIGHT;
@@ -139,21 +141,17 @@
 
   var setInactiveState = function () {
     switchDisabled(formElements, true);
-    addClass(area, fadedClass);
-    addClass(adForm, disabledClass);
-
-    fillAddressByCalculatedCoords(mainPin, mainPinSize);
+    addClass(area, window.constants.MAP_FADED);
+    addClass(adForm, window.constants.FORM_DISABLED);
+    getMainPinCoords();
+    fillAddressByCalculatedCoords(mainPin, window.constants.MainPinSize);
   };
 
   setInactiveState();
-  makeDraggable(mainPin, mainPinSize, area, areaSize, fillAddressByCalculatedCoords);
+  makeDraggable(mainPin, window.constants.MainPinSize,
+      area, window.constants.Area, fillAddressByCalculatedCoords);
 
   window.map = {
-    area: area,
-    mainPin: mainPin,
-    mainPinSize: mainPinSize,
-    calculateCoords: calculateCoords,
-    fillAddressByCalculatedCoords: fillAddressByCalculatedCoords,
     setInactiveState: setInactiveState,
     closeCard: closeCard,
     deletePins: deletePins,

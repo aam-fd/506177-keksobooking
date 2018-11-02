@@ -2,13 +2,6 @@
 
 (function () {
 
-  var TYPES_PRICE = {
-    palace: 10000,
-    flat: 1000,
-    house: 5000,
-    bungalo: 0
-  };
-
   var adForm = document.querySelector('.ad-form');
 
   var selectInvalidFieldForm = function (field) {
@@ -24,8 +17,8 @@
 
   var getPriceInput = function () {
     var choosenType = typeInput.value;
-    priceInput.min = TYPES_PRICE[choosenType];
-    priceInput.placeholder = TYPES_PRICE[choosenType];
+    priceInput.min = window.constants.TypesPrice[choosenType.toUpperCase()];
+    priceInput.placeholder = window.constants.TypesPrice[choosenType.toUpperCase()];
   };
 
   var onTypeInputChange = function () {
@@ -155,7 +148,7 @@
     };
 
     var onEscPress = function (evt) {
-      if (evt.keyCode === 27) {
+      if (evt.keyCode === window.constants.ESC_KEYCODE) {
         main.removeChild(error);
       }
       removeEventListener();
@@ -183,7 +176,7 @@
         onError();
       }
     });
-    xhr.open('POST', window.constants.URL);
+    xhr.open('POST', window.constants.URL_FOR_POST);
     xhr.send(new FormData(adForm));
   };
 

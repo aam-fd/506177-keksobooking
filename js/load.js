@@ -2,8 +2,6 @@
 
 (function () {
 
-  var URL = 'https://js.dump.academy/keksobooking/data';
-
   var onError = function () {
     var errorTemplate = document.querySelector('#error')
                                 .content
@@ -20,7 +18,7 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === window.constants.CodeStatus.OK) {
         onSuccess(xhr.response);
       } else {
         onError();
@@ -32,7 +30,7 @@
       onError();
     });
 
-    xhr.open('GET', URL);
+    xhr.open('GET', window.constants.URL_FOR_GET);
     xhr.send();
 
   };
