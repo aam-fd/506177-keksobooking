@@ -2,7 +2,7 @@
 
 window.filter = (function () {
 
-  var array = [];
+  var ads = [];
   var callback;
 
   var filterForm = document.querySelector('.map__filters');
@@ -83,30 +83,26 @@ window.filter = (function () {
       }
     });
 
-    if (featuresSelected.includes(false)) {
-      return false;
-    } else {
-      return true;
-    }
+    return !featuresSelected.includes(false);
 
   };
 
   var getFilteredData = function () {
-    var filteredData = array.filter(typeFilter)
+    var filteredAds = ads.filter(typeFilter)
                             .filter(priceFilter)
                             .filter(roomsFilter)
                             .filter(guestsFilter)
                             .filter(featuresFilter)
                             .slice(0, window.constants.MAX_RENDERED_PINS);
 
-    callback(filteredData);
+    callback(filteredAds);
   };
 
   var onFilterFormChange = window.debounce(getFilteredData, window.constants.DEBOUNCE_INTERVAL);
 
   return function (arr, cb) {
 
-    array = arr;
+    ads = arr;
     callback = cb;
 
     getFilteredData();

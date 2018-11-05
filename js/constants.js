@@ -32,7 +32,7 @@ window.constants = (function () {
 
     MainPinSize: {
       WIDTH: 65,
-      HEIGHT: 87
+      HEIGHT: 84
     },
 
     MainPinCoordinate: {
@@ -43,6 +43,10 @@ window.constants = (function () {
     MAP_FADED: 'map--faded',
 
     FORM_DISABLED: 'ad-form--disabled',
+
+    ACTIVE_PIN: 'map__pin--active',
+
+    IMG_TAG: 'IMG',
 
     MAX_RENDERED_PINS: 5,
 
@@ -69,8 +73,10 @@ window.constants = (function () {
       SERVER_ERROR: 500,
     },
 
-    ESC_KEYCODE: 27,
-
+    KeyCode: {
+      ESC: 27,
+      ENTER: 13
+    },
   };
 
 })();

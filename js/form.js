@@ -49,19 +49,19 @@
     // булевые значения для кол-ва гостей
     // false для дизактивации disabled
     // 0:'для 3 гостей', 1:'для 2 гостей' , 2:'для 1 гостя', 3:'не для гостей'
-    var roomCapacity = {
+    var RoomCapacity = {
       '1': [true, true, false, true],
       '2': [true, false, false, true],
       '3': [false, false, false, true],
       '100': [true, true, true, false]
     };
 
-    var countGuests = roomCapacity[numberRooms];
+    var countGuests = RoomCapacity[numberRooms];
 
-    for (var i = 0; i < capacityInput.length; i++) {
-      capacityInput[i].disabled = countGuests[i];
-      capacityInput[i].selected = !countGuests[i];
-    }
+    [].forEach.call(capacityInput, function (option, index) {
+      option.disabled = countGuests[index];
+      option.selected = !countGuests[index];
+    });
   };
 
   var onRoomNumberChange = function () {

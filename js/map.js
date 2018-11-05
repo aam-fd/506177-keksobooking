@@ -4,7 +4,6 @@
 
   var area = document.querySelector('.map');
   var mainPin = area.querySelector('.map__pin--main');
-  var formElements = document.querySelectorAll('fieldset');
 
   var areaPins = document.querySelector('.map__pins');
   var pins = document.createElement('div');
@@ -13,6 +12,7 @@
 
   var filterForm = document.querySelector('.map__filters');
   var adForm = document.querySelector('.ad-form');
+  var formElements = adForm.querySelectorAll('fieldset');
   var addressInput = adForm.querySelector('#address');
 
   var switchDisabled = window.util.switchDisabled;
@@ -35,7 +35,7 @@
   };
 
   var onEscPressToCloseCardAd = function (evt) {
-    if (evt.keyCode === window.constants.ESC_KEYCODE) {
+    if (evt.keyCode === window.constants.KeyCode.ESC) {
       closeCard();
     }
     document.removeEventListener('keydown', onEscPressToCloseCardAd);
@@ -68,12 +68,23 @@
   };
 
   var renderPins = function (data) {
-
     deletePins();
 
     var onPinClick = function (evt) {
-      var selectedAd = data[evt.target.id];
+
+      var pin = evt.target.tagName === window.constants.IMG_TAG
+        ? evt.target.parentElement
+        : evt.target;
+
+      var selectedAd = data[pin.id];
       renderCardAd(selectedAd);
+
+      var activePin = document.querySelector('.' + window.constants.ACTIVE_PIN);
+      if (activePin !== null) {
+        removeClass(activePin, window.constants.ACTIVE_PIN);
+      }
+
+      addClass(pin, window.constants.ACTIVE_PIN);
     };
 
     for (var i = 0; i < data.length; i++) {
@@ -84,6 +95,11 @@
   };
 
   var onSuccess = function (data) {
+
+    data.forEach(function (ad, index) {
+      ad.class = 'pin-' + index;
+    });
+
     renderPins(data);
     filter(data, renderPins);
 
@@ -93,7 +109,8 @@
     switchDisabled(formElements, false);
     removeClass(area, window.constants.MAP_FADED);
     removeClass(adForm, window.constants.FORM_DISABLED);
-    switchDisabled(filterForm, true);
+    shiftMainPinCoordsToTail();
+    window.load(onSuccess);
   };
 
   var getMainPinCoords = function () {
@@ -110,10 +127,16 @@
 
   var onMainPinFirstMouseUp = function () {
     setActiveState();
-    shiftMainPinCoordsToTail();
 
-    window.load(onSuccess);
     mainPin.removeEventListener('mouseup', onMainPinFirstMouseUp);
+  };
+
+  var onEnterPress = function (evt) {
+    if (evt.keyCode === window.constants.KeyCode.ENTER) {
+      setActiveState();
+    }
+
+    document.removeEventListener('keydown', onEnterPress);
   };
 
   var calculateCoords = function (element, elementSize) {
@@ -126,7 +149,7 @@
       pinY = element.offsetTop + elementSize.HEIGHT;
     }
 
-    return pinX + ', ' + pinY;
+    return Math.round(pinX) + ', ' + Math.round(pinY);
   };
 
   var fillAddressByCalculatedCoords = function (element, elementSize) {
@@ -134,6 +157,7 @@
   };
 
   var setMainPinEventListener = function () {
+    document.addEventListener('keydown', onEnterPress);
     mainPin.addEventListener('mouseup', onMainPinFirstMouseUp);
   };
 
@@ -143,13 +167,14 @@
     switchDisabled(formElements, true);
     addClass(area, window.constants.MAP_FADED);
     addClass(adForm, window.constants.FORM_DISABLED);
+    switchDisabled(filterForm, true);
     getMainPinCoords();
     fillAddressByCalculatedCoords(mainPin, window.constants.MainPinSize);
   };
 
   setInactiveState();
   makeDraggable(mainPin, window.constants.MainPinSize,
-      area, window.constants.Area, fillAddressByCalculatedCoords);
+      areaPins, window.constants.Area, fillAddressByCalculatedCoords);
 
   window.map = {
     setInactiveState: setInactiveState,
