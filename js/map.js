@@ -24,7 +24,7 @@
   var createCard = window.card.create;
   var createPin = window.pin.create;
   var makeDraggable = window.makeDraggable;
-  var changeAvatar = window.avatar;
+  var fileUpload = window.fileUpload;
   var filter = window.filter;
 
   var removeActivePin = function () {
@@ -249,8 +249,11 @@
     setInactivePage();
   };
 
-  var fileUpload = document.querySelector('.ad-form__field input[type=file]');
-  var avatar = document.querySelector('.ad-form-header__preview img');
+  var avatarUploadInput = document.querySelector('.ad-form__field input[type=file]');
+  var avatar = document.querySelector('.ad-form-header__preview');
+
+  var photoUploadInput = document.querySelector('.ad-form__upload input[type=file]');
+  var photo = document.querySelector('.ad-form__photo');
 
   var setActiveState = function () {
     switchDisabled(formElements, false);
@@ -261,7 +264,10 @@
     window.load('json', onLoad, onError, 'GET', window.constants.Url.GET, '');
     makeDraggable(mainPin, window.constants.MainPinSize,
         areaPins, window.constants.Area, fillAddressByCalculatedCoords);
-    changeAvatar(fileUpload, avatar);
+
+    avatarUploadInput.addEventListener('change', window.upload(avatarUploadInput, avatar));
+    photoUploadInput.addEventListener('change', window.upload(photoUploadInput, photo));
+
     adForm.addEventListener('submit', onAdFormSubmit);
     adForm.addEventListener('reset', onAdFormReset);
   };

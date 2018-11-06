@@ -13,9 +13,10 @@ window.filter = (function () {
     var typeFilterValue = filterForm.querySelector('#housing-type')
                                     .value;
 
-    return typeFilterValue === window.constants.ValueRange.ANY ?
-      true :
-      adType === typeFilterValue;
+    if (typeFilterValue === window.constants.ValueRange.ANY) {
+      return true;
+    }
+    return adType === typeFilterValue;
 
   };
 
@@ -25,18 +26,16 @@ window.filter = (function () {
     var priceFilterValue = filterForm.querySelector('#housing-price')
                                      .value;
 
-    if (priceFilterValue === window.constants.ValueRange.LOW) {
-      return adPrice < window.constants.Price.LOWER_LIMIT;
-
-    } else if (priceFilterValue === window.constants.ValueRange.MIDDLE) {
-      return adPrice > window.constants.Price.LOWER_LIMIT
-             && adPrice < window.constants.Price.HIGHER_LIMIT;
-
-    } else if (priceFilterValue === window.constants.ValueRange.HIGH) {
-      return adPrice > window.constants.Price.HIGHER_LIMIT;
-
-    } else {
-      return true;
+    switch (priceFilterValue) {
+      case window.constants.ValueRange.LOW :
+        return adPrice < window.constants.Price.LOWER_LIMIT;
+      case window.constants.ValueRange.MIDDLE :
+        return adPrice > window.constants.Price.LOWER_LIMIT
+               && adPrice < window.constants.Price.HIGHER_LIMIT;
+      case window.constants.ValueRange.HIGH :
+        return adPrice > window.constants.Price.HIGHER_LIMIT;
+      default :
+        return true;
     }
   };
 
@@ -46,9 +45,11 @@ window.filter = (function () {
     var roomsFilterValue = filterForm.querySelector('#housing-rooms')
                                      .value;
 
-    return roomsFilterValue === window.constants.ValueRange.ANY ?
-      true :
-      adRooms === +roomsFilterValue;
+    if (roomsFilterValue === window.constants.ValueRange.ANY) {
+      return true;
+    }
+    return adRooms === +roomsFilterValue;
+
   };
 
   var guestsFilter = function (object) {
@@ -57,10 +58,10 @@ window.filter = (function () {
     var guestsFilterValue = filterForm.querySelector('#housing-guests')
                                         .value;
 
-    return guestsFilterValue === window.constants.ValueRange.ANY ?
-      true :
-      adGuests === +guestsFilterValue;
-
+    if (guestsFilterValue === window.constants.ValueRange.ANY) {
+      return true;
+    }
+    return adGuests === +guestsFilterValue;
   };
 
   var featuresFilter = function (object) {
