@@ -33,18 +33,23 @@
 
     var cardFeatures = card.querySelector('.popup__features');
     cardFeatures.textContent = '';
-    for (var i = 0; i < features.length; i++) {
-      cardFeatures.insertAdjacentHTML('beforeend', '<li class="popup__feature popup__feature--' + features[i] + '"></li>');
-    }
+
+    features.forEach(function (feature) {
+      cardFeatures.insertAdjacentHTML('beforeend', '<li class="popup__feature popup__feature--' + feature + '"></li>');
+    });
 
     var cardPhotos = card.querySelector('.popup__photos');
     cardPhotos.textContent = '';
-    for (var j = 0; j < photos.length; j++) {
-      cardPhotos.insertAdjacentHTML('beforeend', '<img src="' + photos[j] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья"></img>');
-    }
+
+    photos.forEach(function (photo) {
+      cardPhotos.insertAdjacentHTML('beforeend', '<img src="' + photo + '" class="popup__photo" width="45" height="40" alt="Фотография жилья"></img>');
+    });
 
     var closeButton = card.querySelector('.popup__close');
-    closeButton.addEventListener('click', callback);
+    var onCloseButtonClick = function () {
+      callback();
+    };
+    closeButton.addEventListener('click', onCloseButtonClick);
 
     return card;
   };

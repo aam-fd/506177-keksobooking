@@ -22,7 +22,7 @@ window.makeDraggable = (function () {
 
       var areaCoords = area.getBoundingClientRect();
       var areaCoordsLeft = areaCoords.left + elementSize.WIDTH / 2;
-      var areaCoordsRight = areaCoords.right - elementSize.WIDTH / 2;
+      var areaCoordsRight = areaCoords.right;
       var areaCoordsTop = areaSize.MIN_Y;
       var areaCoordsBottom = areaSize.MAX_Y;
 
@@ -39,17 +39,28 @@ window.makeDraggable = (function () {
         y: pageY
       };
 
-      if (pageX > areaCoordsLeft &&
-            pageX < areaCoordsRight &&
-            pageY > areaCoordsTop &&
-            pageY < areaCoordsBottom) {
+      var pinPositionX = element.offsetLeft - shift.x;
+      var pinPositionY = element.offsetTop - shift.y;
 
-        callback(element, elementSize);
-
-        element.style.left = (element.offsetLeft - shift.x) + 'px';
-        element.style.top = (element.offsetTop - shift.y) + 'px';
-
+      if (pageX < areaCoordsLeft) {
+        pinPositionX = -elementSize.WIDTH / 2;
       }
+
+      if (pageX > areaCoordsRight) {
+        pinPositionX = areaCoordsRight - elementSize.WIDTH / 2;
+      }
+
+      if (element.offsetTop > areaCoordsBottom - elementSize.HEIGHT) {
+        pinPositionY = areaSize.MAX_Y - elementSize.HEIGHT; // 546
+      }
+
+      if (element.offsetTop < areaCoordsTop - elementSize.HEIGHT) {
+        pinPositionY = areaSize.MIN_Y - elementSize.HEIGHT; // 46
+      }
+
+      callback(element, elementSize);
+      element.style.left = pinPositionX + 'px';
+      element.style.top = pinPositionY + 'px';
     };
 
     var onMouseUp = function (upEvt) {

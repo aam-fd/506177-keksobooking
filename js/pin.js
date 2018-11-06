@@ -21,7 +21,6 @@
     var img = pin.querySelector('img');
     img.src = avatar;
     img.alt = title;
-    img.id = id;
     pin.id = id;
     pin.addEventListener('click', onPinClick);
 

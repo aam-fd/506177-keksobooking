@@ -5,9 +5,9 @@ window.util = (function () {
   return {
 
     switchDisabled: function (elementArray, state) {
-      for (var i = 0; i < elementArray.length; i++) {
-        elementArray[i].disabled = state;
-      }
+      [].forEach.call(elementArray, function (element) {
+        element.disabled = state;
+      });
     },
 
     fillInputValue: function (input, value) {
