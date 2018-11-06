@@ -24,7 +24,6 @@
   var createCard = window.card.create;
   var createPin = window.pin.create;
   var makeDraggable = window.makeDraggable;
-  var fileUpload = window.fileUpload;
   var filter = window.filter;
 
   var removeActivePin = function () {
