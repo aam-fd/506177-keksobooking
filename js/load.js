@@ -5,9 +5,11 @@ window.load = (function (type, onSuccess, onError, method, url, sendElement) {
   xhr.responseType = type;
 
   xhr.addEventListener('load', function () {
-    return xhr.status === window.constants.CodeStatus.OK ?
-      onSuccess(xhr.response) :
+    if (xhr.status === window.constants.CodeStatus.OK) {
+      onSuccess(xhr.response);
+    } else {
       onError();
+    }
 
   });
 
