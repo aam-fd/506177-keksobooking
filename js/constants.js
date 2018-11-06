@@ -64,8 +64,10 @@ window.constants = (function () {
 
     DEBOUNCE_INTERVAL: 500,
 
-    URL_FOR_POST: 'https://js.dump.academy/keksobooking',
-    URL_FOR_GET: 'https://js.dump.academy/keksobooking/data',
+    Url: {
+      POST: 'https://js.dump.academy/keksobooking',
+      GET: 'https://js.dump.academy/keksobooking/data',
+    },
 
     CodeStatus: {
       OK: 200,
@@ -77,6 +79,8 @@ window.constants = (function () {
       ESC: 27,
       ENTER: 13
     },
+
+    FILE_TYPES: ['gif', 'jpg', 'jpeg', 'png'],
   };
 
 })();
