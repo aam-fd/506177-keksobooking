@@ -1,17 +1,16 @@
 'use strict';
 
-(function () {
-  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+window.avatar = (function () {
 
-  var fileChooser = document.querySelector('.ad-form__field input[type=file]');
-  var preview = document.querySelector('.ad-form-header__preview img');
+  var fileChooser;
+  var preview;
 
   var onFileChooserChange = function () {
 
     var file = fileChooser.files[0];
     var fileName = file.name.toLowerCase();
 
-    var matches = FILE_TYPES.some(function (it) {
+    var matches = window.constants.FILE_TYPES.some(function (it) {
       return fileName.endsWith(it);
     });
 
@@ -26,5 +25,11 @@
     }
   };
 
-  fileChooser.addEventListener('change', onFileChooserChange);
+  return function (loader, img) {
+    fileChooser = loader;
+    preview = img;
+
+    fileChooser.addEventListener('change', onFileChooserChange);
+  };
+
 })();
