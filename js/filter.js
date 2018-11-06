@@ -13,11 +13,10 @@ window.filter = (function () {
     var typeFilterValue = filterForm.querySelector('#housing-type')
                                     .value;
 
-    if (typeFilterValue === window.constants.ValueRange.ANY) {
-      return true;
-    } else {
-      return adType === typeFilterValue;
-    }
+    return typeFilterValue === window.constants.ValueRange.ANY ?
+      true :
+      adType === typeFilterValue;
+
   };
 
   var priceFilter = function (object) {
@@ -27,16 +26,13 @@ window.filter = (function () {
                                      .value;
 
     if (priceFilterValue === window.constants.ValueRange.LOW) {
-
       return adPrice < window.constants.Price.LOWER_LIMIT;
 
     } else if (priceFilterValue === window.constants.ValueRange.MIDDLE) {
-
       return adPrice > window.constants.Price.LOWER_LIMIT
              && adPrice < window.constants.Price.HIGHER_LIMIT;
 
     } else if (priceFilterValue === window.constants.ValueRange.HIGH) {
-
       return adPrice > window.constants.Price.HIGHER_LIMIT;
 
     } else {
@@ -50,11 +46,9 @@ window.filter = (function () {
     var roomsFilterValue = filterForm.querySelector('#housing-rooms')
                                      .value;
 
-    if (roomsFilterValue === window.constants.ValueRange.ANY) {
-      return true;
-    } else {
-      return adRooms === +roomsFilterValue;
-    }
+    return roomsFilterValue === window.constants.ValueRange.ANY ?
+      true :
+      adRooms === +roomsFilterValue;
   };
 
   var guestsFilter = function (object) {
@@ -63,11 +57,10 @@ window.filter = (function () {
     var guestsFilterValue = filterForm.querySelector('#housing-guests')
                                         .value;
 
-    if (guestsFilterValue === window.constants.ValueRange.ANY) {
-      return true;
-    } else {
-      return adGuests === +guestsFilterValue;
-    }
+    return guestsFilterValue === window.constants.ValueRange.ANY ?
+      true :
+      adGuests === +guestsFilterValue;
+
   };
 
   var featuresFilter = function (object) {
