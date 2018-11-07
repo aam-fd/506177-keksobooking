@@ -248,12 +248,6 @@
     setInactivePage();
   };
 
-  var avatarUploadInput = document.querySelector('.ad-form-header__input');
-  var avatar = document.querySelector('.ad-form-header__preview');
-
-  var photoUploadInput = document.querySelector('.ad-form__input');
-  var photo = document.querySelector('.ad-form__photo-container');
-
   var setActiveState = function () {
     switchDisabled(formElements, false);
     removeClass(area, window.constants.MAP_FADED);
@@ -263,9 +257,6 @@
     window.load('json', onLoad, onError, 'GET', window.constants.Url.GET, '');
     makeDraggable(mainPin, window.constants.MainPinSize,
         areaPins, window.constants.Area, fillAddressByCalculatedCoords);
-
-    avatarUploadInput.addEventListener('change', window.upload(avatarUploadInput, avatar));
-    photoUploadInput.addEventListener('change', window.upload(photoUploadInput, photo));
 
     adForm.addEventListener('submit', onAdFormSubmit);
     adForm.addEventListener('reset', onAdFormReset);

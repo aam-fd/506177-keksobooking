@@ -77,4 +77,12 @@
   timeOutInput.addEventListener('change', onTimeOutInputChange);
   roomNumberInput.addEventListener('change', onRoomNumberChange);
 
+  var avatarUploadInput = document.querySelector('.ad-form-header__input');
+  var avatar = document.querySelector('.ad-form-header__preview');
+
+  var photoUploadInput = document.querySelector('.ad-form__input');
+  var photo = document.querySelector('.ad-form__photo-container');
+
+  avatarUploadInput.addEventListener('change', window.upload(avatarUploadInput, avatar));
+  photoUploadInput.addEventListener('change', window.upload(photoUploadInput, photo));
 })();
