@@ -248,11 +248,11 @@
     setInactivePage();
   };
 
-  var avatarUploadInput = document.querySelector('.ad-form__field input[type=file]');
+  var avatarUploadInput = document.querySelector('.ad-form-header__input');
   var avatar = document.querySelector('.ad-form-header__preview');
 
-  var photoUploadInput = document.querySelector('.ad-form__upload input[type=file]');
-  var photo = document.querySelector('.ad-form__photo');
+  var photoUploadInput = document.querySelector('.ad-form__input');
+  var photo = document.querySelector('.ad-form__photo-container');
 
   var setActiveState = function () {
     switchDisabled(formElements, false);

@@ -21,6 +21,13 @@ window.util = (function () {
     addClass: function (element, elementClass) {
       element.classList.add(elementClass);
     },
+
+    createImgPhotoContainer: function () {
+      var img = document.createElement('img');
+      img.width = '70';
+      img.height = '70';
+      return img;
+    },
   };
 
 })();
