@@ -49,15 +49,17 @@
       };
 
       var photo = fileChooser.files[0];
+      var readFile;
 
       if (fileChooser.classList.contains('ad-form-header__input')) {
-        renderFile(readAvatarFile, photo);
+        readFile = readAvatarFile;
       }
 
       if (fileChooser.classList.contains('ad-form__input')) {
-        renderFile(readPhotoFile, photo);
+        readFile = readPhotoFile;
       }
 
+      renderFile(readFile, photo);
     };
   };
 
